@@ -1,0 +1,823 @@
+<HTML>
+<meta http-equiv="content-type" charset="utf-8">
+
+<BODY BGCOLOR="white">
+
+<HEAD>
+	<TITLE>
+		LAMMPSと連携ソフトウエアによる有機材料の分子動力学計算
+	</TITLE>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30624012-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</HEAD>
+<BR>
+
+<P>
+<HR WIDTH=60% ALIGN="center">
+	<H2 ALIGN="center"><FONT COLOR="crimson">
+		「LAMMPSと連携ソフトウエアによる有機材料の分子動力学計算」</H2>
+	</FONT>
+
+<HR WIDTH=60% ALIGN="center">
+</P>
+
+<P>
+<H4 ALIGN="center">
+	産業技術総合研究所　米谷　慎
+</H4>
+</P>
+<BR>
+
+<BLOCKQUOTE>
+<BLOCKQUOTE>
+<BLOCKQUOTE>
+<BLOCKQUOTE>
+フリーな分子動力学計算プログラムの一つである LAMMPS と連携ソフトウエアを用いて、
+有機・低分子材料の分子動力学計算を WindowsPC（Windows 10 64bit) を用いて行う方法を説明する。
+<BR>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<BR>
+
+<P>
+<H2 ALIGN="center"><FONT COLOR="crimson">使用ソフトとインストール方法
+</FONT></H2>
+<HR WIDTH=50% ALIGN="center">
+</P>
+
+<BLOCKQUOTE><BLOCKQUOTE>
+
+<BR>
+
+<P>
+<B>Windows Subsystem for Linux (WSL)</B>
+</P>
+<P>
+Windows 10 64bit でubuntu等のLINUXを利用可能とするMicrosof提供の環境。<BR>
+下記でLAMMPS等の実行の環境として使用する。<BR>
+WSLのインストール法についてはネット上に多くの情報があるので、
+例えば<a href="https://qiita.com/Aruneko/items/c79810b0b015bebf30bb">ここ</A>等を参照してインストールする。
+</P>
+<P>
+WSLインストール後に、WSLを起動して後に必要となるプログラムを追加しておく。<BR>
+まず、左下隅のWindowsアイコン - アプリリストから ubuntu ***（あるいは Bash on Ubuntu on Windows）を選択して WSL のコンソールを起動し、
+下記コマンドを入力する。
+</P>
+<P>
+sudo apt install dos2unix python-pip libgfortran3 liblapack-dev
+</P>
+<P>
+上記コマンド実行時に、WSLのインストール時に入力したユーザーパスワード入力を求められるので入力する。<BR>
+下記内容は、WSL の ubuntu 18.04LTSで検証しているが、ubuntu 別バージョンの場合には他にも追加インストールが必要な場合がある。
+</P>
+
+<P>
+<B>LAMMPS</B>
+</P>
+<P>
+次に、分子動力学シミュレーションプログラム<a href="https://lammps.sandia.gov/">LAMMPS</A>のバイナリを、
+上記のWSLへのプログラム追加と同様に、WSLコンソールに下記のコマンドを入力して LAMMPS をインストールする。
+</P>
+
+<P>
+sudo apt install lammps
+</P>
+
+<P>
+インストール終了後に、下記コマンドを入力して、
+</P>
+
+<P>
+which lammps
+</P>
+
+<P>
+/usr/bin/lammps
+</P>
+
+<P>
+と表示されればLAMMPSのインストールが確認できる。
+</P>
+
+<B>moltemplate</B>
+</P>
+<P>
+次に、LAMMPS の支援プログラム<a href="https://www.moltemplate.org/"> moltemplate </A>をダウンロード・インストールする。
+<BR>
+まず、WSLコンソールで下記のコマンドを入力して、moltemplateをダウンロード・インストールするスクリプトファイルをダウンロードする。
+</P>
+
+<P>
+wget --no-check-certificate http://staff.aist.go.jp/makoto-yoneya/MDonWINPC/install_moltemplate.sh
+</P>
+
+<P>
+次にダウンロードしたこのスクリプトファイルをWSLコンソールから次の様に入力して実行する。
+</P>
+
+<P>
+sh install_moltemplate.sh
+</P>
+
+<P>
+これによって、moltemplateが自動ダウンロード・インストールされる。
+</P>
+
+<B>packmol, atomsk, ambermini, mol22lt.pl</B>
+</P>
+<P>
+次に、初期構造作成支援プログラム<a href="http://m3g.iqm.unicamp.br/packmol/home.shtml"> packmol </A>と、
+LAMMPSファイルフォーマット変換等を行うプログラム<a href="http://atomsk.univ-lille1.fr/"> atomsk </A>、
+general AMBER 力場を使うための支援プログラム<a href="https://github.com/choderalab/ambermini/blob/master/README.md"> ambermini </A>、
+SYBYL-mol2ファイルをmoltemplateの入力分子テンプレートファイルに変換するスクリプトmol22lt.plをダウンロード・インストールする。
+</P>
+<FONT COLOR=RED>更新情報<BR>
+ambermini を AmberTools16 ベースから AmberTools19 ベースの物に変更。</FONT><BR>
+<P>
+上記と同様に、WSLコンソールで下記のコマンドを入力して上記をインストールするスクリプトファイルをダウンロードする。
+</P>
+<P>
+wget --no-check-certificate http://staff.aist.go.jp/makoto-yoneya/MDonWINPC/install_WSLmisc.sh
+</P>
+<P>
+次にダウンロードしたこのスクリプトファイルをWSLコンソールから次の様に入力して実行する。
+</P>
+<P>
+sh install_WSLmisc.sh
+</P>
+<P>
+以上でWSLコンソールでのインストール作業は終了なので、WSLコンソールで、"exit"と入力してWSLを終了させる。
+</P>
+
+<P>
+<B>ChemSketch Freeware</B>
+</P>
+<P>
+Windows 向けの分子構造描画ソフトChemSketchのフリー版で、MDL-mol ファイル形式の分子構造ファイルを作成するために用いる。
+上記の形式のファイルがアウトプットとして得られるソフトであれば ChemOffice: ChemDraw＋Chem3D 等何を使って作成しても良いが、注意点として、作成する分子構造ファイルは水素原子を含んだ三次元座標データである必要がある。<BR>
+ChemSketch Freeware は、Advanced Chemistry Development, Inc の<a href="http://www.acdlabs.com/resources/freeware/chemsketch/">ホームページ</a>からダウンロード可能である（ユーザー登録が必要）。<BR>
+ダウンロードしたインストーラーファイルをダブルクリックして、後は表示に従えば、一般のwindowsアプリケーションと同様にインストールできる。
+</P>
+
+<P>
+<B>VMD (Visual Molecular Dynamics)</B>
+</P>
+<P>
+MD計算のスナップショットや、アニメーションの表示に用いる分子表示ソフト。<BR>
+VMD は、<a href="http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD">ホームページ</a>から Windows 版をダウンロード可能である。<BR>
+ダウンロードしたインストーラーファイルをダブルクリックして、後は表示に従えば、一般のwindowsアプリケーションと同様にインストールできる。
+</P>
+
+<P>
+以上で、演習環境が整うはずである。<BR>
+LAMMPSをアンインストールしたい場合には、WSLコンソールで下記コマンドを入力する。
+</P>
+
+<P>
+sudo apt remove lammps
+</P>
+
+</BLOCKQUOTE></BLOCKQUOTE>
+<BR>
+
+<P>
+<H2 ALIGN="center"><FONT COLOR="crimson">演習内容
+</FONT></H2>
+<HR WIDTH=50% ALIGN="center">
+</P>
+
+<BLOCKQUOTE><BLOCKQUOTE> 
+
+<P>
+<h4 class="subsectionHead">1. 分子モデリング</h4>
+</P>
+
+<h5 class="subsubsectionHead">1.1 一分子構造ファイルの準備</h5>
+
+<P>
+最初のステップとして、対象とする分子（ここでは MOFの有機配位子 4,4'-bpyを例に説明）の分子構造ファイルを、水素原子を含んだ形で三次元座標として、MDL-mol ファイルで ChemSketch Freeware 等を用いて作成する（ChemOffice の場合は後述）。
+</P>
+
+<P>
+ChemSketch Freewareを用いた化学構造の描画は直感的に可能である。原子のインデックス番号は、基本的に作画した順に振られていくので、図１のように端から番号をつけたければ作画の順番を意識するとよい。
+</P>
+
+<CENTER>
+<P>
+<img src="images/ChemSketch_bpy.jpg" alt="PIC" class="graphics" width=50%>
+</P>
+
+<P>
+Fig. 1 Drawing 4,4'-bpy with ChemSketch
+</P>
+</CENTER>
+
+<P>
+原子の番号の表示は、 Edit メニューから Select All で分子全体を選択し、次に Tools メニューから Structure Property を選択して表示される小ウインドウの Atom メニューの N(Numbering) をクリックし、右に表示される Show チェックボックスを ON にして Apply すると可能である。
+</P>
+
+<P>
+図１のような水素原子を省略した構造を作成した後、 ACD/Labs メニューから 3D Viewer を起動し、左下に表示されるリストから ChemSketch を選択して一度 ChemSketch に戻り作成した分子構造を表示させる。
+次に左下のリストに表示される copy to3D Viewer を選択すると、 ChemSketch で作成した分子構造が 3D Viewer に表示される。
+次に、 Tools メニューから 3Doptimization を実行する。
+これにより、図２の様に、省略されていた水素原子が付加され、同時に分子構造を三次元化することができる。<BR>
+<FONT COLOR=RED>上記 3Doptimization を実施しないと次のステップでエラーが発生するので注意。</FONT>
+</P>
+
+<CENTER>
+<P>
+<img src="images/3Dviewer_bpy-aa.jpg" alt="PIC" class="graphics" width=50%>
+</P>
+
+<P>
+Fig. 2 4,4'-bpy after 3D optimization
+</P>
+</CENTER>
+
+<P>
+ここで、次に左下のリストの copy to ChemSketch を選択し、3D Viewer でoptimizeした分子構造を ChemSketch に上書きする。<BR>
+次に、ChemSketchのFile メニューから export で、ファイルの種類として MDL molfiles [<FONT COLOR=RED>V2000</FONT>] を選択し、適当なファイル名 (bpy.mol等) をつけて、自分の Windows ユーザー名が漢字でなく英数字の場合は下記のフォルダに保存する。
+<P>
+C:\Users¥ユーザー名（あるいは C:\ユーザー¥ユーザー名）
+</P>
+自分のユーザー名が漢字の場合は、後での作業のため上記の代わりに、
+<P>
+C:\Users¥Public（あるいは C:\ユーザー¥パブリック）
+</P>
+に保存する。
+<BR>
+
+<P>
+ChemOffice の場合は、ChemSchetchの代わりにChemDrawで分子構造を２次元的に作成した後、ChemDrawの上段メニューからView - Show Chem3D HotLink Windowを実行することにより、省略されていた水素原子が付加され、三次元化された分子構造がサブウインドウに表示される。<BR>
+次にこのサブウインドウ左下隅のアイコン（Launch Chem3D）をクリックして、Chem3Dを立ち上げ、その上段メニューからFile - Save Copy Asで表示されるサブウインドウで、上記のChemSketch+3D Viewerと同様にファイルの種類として MDL molfiles (<FONT COLOR=RED>V3000でない方</FONT>) を選択し、適当なファイル名 (bpy.mol等) をつけて上記のフォルダに保存する。
+</P>
+
+<h5 class="subsubsectionHead">1.2 多分子初期構造の準備</h5>
+
+<p>
+前節で作成した一分子モデルを用いて多分子シミュレーションを行うためには、その初期条件として多分子からなる初期構造が必要となる。
+現実的な計算時間で熱平衡状態に近づけるためには、適切な初期構造の選択が重要となる。
+計算に用いる初期構造を得る方法としては次が考えられる。     
+<ol  class="enumerate1" >
+     <li class="enumerate" value="1">乱数等を用いランダムに分子を配置して用いる</li>
+     <li class="enumerate" value="2">X 線回折による結晶構造データーを用いる</li>
+     <li class="enumerate" value="3">人為的な結晶構造を作成して用いる</li>
+</ol>
+最初のランダム配置した初期構造は、<a href="http://m3g.iqm.unicamp.br/packmol/home.shtml"> packmol </a>プログラムによって作成可能である。
+</P>
+
+<P>
+packmol は、Windows Subsystem for Linux (WSL)のコマンドプロンプト画面で実行する。
+<BR>
+WSLコマンドプロンプトは、左下隅のウインドウズアイコンをクリックして表示されるプログラムメニューから、"ubuntu *** (あるいは Bash on Ubuntu on Windows）"　を選択すると表示される。
+<BR>
+上記のWSLコマンドプロンプトを開いた直後は、通常は
+</P>
+
+<P>
+/home/WSLインストール時に指定したユーザー名
+</P>
+
+<P>
+というディレクトリ（フォルダ）になっている（コマンドプロンプ表示後半で確認できる）ので、
+前節でChemSketch等で作成したMDL-mol ファイル（bpy.molとする）のあるフォルダに次のコマンドを入力して移動する。
+</P>
+<P>
+cd /mnt/c/Users/自分のWindowsユーザー名
+</P>
+<P>
+Public フォルダにMDL-molファイルを作成した場合は、下記で移動する。
+</P>
+<P>
+cd /mnt/c/Users/Public
+</P>
+<P>
+移動できたかは、コマンドプロンプ表示後半で確認でき、コマンド"ls -l"を入力すると、前節でChemSketch等で作成したMDL-mol ファイル（bpy.molとする）が表示されるはずである。
+</P>
+
+<P>
+packmol は入力座標フォーマットとして上記で作成したMDL-molファイルは読み込めないので、読み込み可能なpdbファイルフォーマットに antehcmber で変換する。
+<BR>
+具体的には、"WSLコマンドプロンプト"で次のように入力する。
+</P>
+<P>
+antechamber -fi mdl -i bpy.mol -fo pdb -o bpy.pdb
+</P>
+<P>
+次に、packmol のインプットファイルを、例えば下記の内容でメモ帳（アプリメニューのWindowsアクセサリの中に有る）等で作成し、
+例えば、bpy-128.txt という名前で上記の molファイル等のあるフォルダに保存する。
+</P>
+<PRE>
+tolerance 2.0
+add_box_sides 2.0
+
+structure bpy.pdb
+  number 128
+  inside box 0. 0. 0. 45. 45. 45.
+end structure
+
+output bpy-128.pdb
+</PRE>
+<p>   
+上記のインプットファイルでは、structureで指定された一分子座標ファイルの分子を、numberで指定された分子数（128 分子）inside boxで指定された 45Å x 45Å x 45Å の box中に配置して、outputで指定された座標ファイル名に書き出す設定となっている。
+</P>
+
+これを用いて、"WSLコマンドプロンプト"で、次のように入力する。
+<P>
+packmol < bpy-128.txt
+</P>
+
+<P>
+上記で作成された座標ファイル（bpy-aa-128.pdb）の分子配置は、プログラムvmdにより図４のように可視化できる。<BR>
+具体的には"コマンドプロンプト"で、
+</p>
+
+<p>
+vmd.exe bpy-128.pdb
+</p>
+
+<p>
+とコマンド入力する。
+</p>
+
+<CENTER>
+<P>
+<img src="images/bpy-aa_128vmd.jpg" alt="PIC" class="graphics">
+</P>
+
+<P>
+Fig. 3 Viewing bpy-128.pdb file with VMD
+</P>
+</CENTER>
+
+<P>
+分子の回転等の操作は、ウインドウ内でマウスボタンを押しながらマウスを動かすことにより可能である。<BR>
+周期境界を表すMD セルは、vmdを実行したコマンドプロンプトで、<BR>
+<!--
+ExtensionsメニューからTK Consoleを選択すると表示されるウインドウで、<BR>
+-->
+pbc box<BR>
+と入力するか、あるいは、VMDのインストールフォルダにあるvmd.rcというファイルの最後に<BR>
+user add key b {pbc box -color green}<BR>
+を追加・保存し、分子表示画面がアクティブな状態でキーボードのｂを押すと表示できる。<BR>
+終了は file メニューから exit を選択する。
+</P>
+
+<h5 class="subsubsectionHead">1.3  LAMMPSデータファイルの生成</h5>
+
+<p>
+次のステップは、LAMMPS によるMD 計算に必要なデーターファイルの作成である。<BR>
+このデーターファイルを作成する方法の一つとして、以下では moltemplate を使う方法を説明する。<BR>
+moltemplate によるデーターファイルの作成には、まずテンプレートファイルを用意する必要がある。<BR>
+以下、ChemSketchで作成したMDL-molファイルからこのテンプレートファイルを作成する手順を説明する。
+</P>
+
+<P>
+まず、ChemSketchで作成したMDL-molファイルをプログラム antechamber を使ってsybyl-mol2ファイルに変換する。
+<BR>
+具体的には、"WSLコマンドプロンプト"で次のように入力する。
+</P>
+<P>
+antechamber -fi mdl -i bpy.mol -fo mol2 -o bpy.mol2 -at gaff -c gas -rn bpy
+</P>
+<P>
+上記実行時に、general AMBER力場(GAFF)中の原子タイプと、"-c gas" で指定した Gastiger 法による原子点電荷が割り振られ、これらの情報は moltemplate で用いられる。
+</P>
+<P>
+general AMBER力場では点電荷として、 Gaussian 等を用いた非経験的分子軌道計算による RESP(Restrained Electro Static Potential) 電荷が標準となっている。<BR>
+Gaussianが利用できる環境にあれば、それを用いて上記の RESP 電荷を算出して用いる方が望ましい。<BR>
+付録A にその方法を説明しておく。
+</P>
+<P>
+次に、moltemplate に必要となる分子毎のテンプレートファイルを、mol22lt.pl で作成するため、同様に"WSLコマンドプロンプト"で次のように入力する、
+<P>
+
+<P>
+mol22lt.pl < bpy.mol2 > bpy.lt
+</P>
+
+<P>
+次に、計算する系のテンプレートファイルを、例えば下記の内容でメモ帳等で作成し、例えば system.txt という名前で保存する。
+</P>
+<PRE>
+import "gaff.lt"
+
+import "bpy.lt"
+
+BPY = new bpy [128]
+</PRE>
+<p>   
+上記のシステムテンプレートファイルでは、計算に使用する力場パラメータファイル(gaff.lt)と、計算する系に存在する分子の分子テンプレートファイル(bpy.lt)をインポートし、その分子数を new bpy [128] で設定している（分子数は、この場合上記の packmol 実行時に設定した128分子）。
+</P>
+
+<P>
+以上で、moltemplate実行の準備ができたので、WSLコマンドプロンプトにて下記の通り入力する。
+</P>
+<P>
+moltemplate.sh -atomstyle full -pdb bpy-128.pdb system.txt
+</P>
+<P>
+上記により、フォルダ
+</P>
+<P>
+C:\Users¥ユーザー名（あるいはPublic）
+</P>
+<P>
+にMD計算に必要な各種ファイルが出来ているはずである。 
+<BR>
+この中で以降の LAMMPS でのMD計算で用いるファイルは、
+</P>
+<ol  class="enumerate1" >
+	<li class="enumerate" value="1">system.data : 座標等を含む、計算する系のLAMMPSデータファイル</li>
+	<li class="enumerate" value="3">system.in   : LAMMPS計算のスクリプトファイルのひな型</li>
+	<li class="enumerate" value="2">system.in.init : 使用する力場（ここではgeneral AMBER力場）の初期設定ファイル</li>
+	<li class="enumerate" value="3">system.in.settings : 力場パラメータファイル</li>
+</ol>
+
+である。
+</P>
+
+<h4 class="subsectionHead">2. 多分子系のシミュレーション</h4>
+
+<h5 class="subsubsectionHead">2.1  エネルギー最小化計算</h5>
+
+<p>
+原理的にはこの時点でも MD 計算を始めることが可能である。
+しかし、上記のようにして人為的に用意した初期構造は非現実的に近接した分子を含む可能性が高い。
+このような状態から MD 計算を始めると、上記の近接分子に起因した高いエネルギーが運動エネルギーに変換され、 MD 計算における時間積分が不安定となる。
+したがって、このような非現実的な近接を取り除く目的で、まずエネルギー最小化を行うのが一般的である。
+</P>
+
+<p>
+まず、LAMMPSでエネルギー最小化計算を実行するスクリプトファイルを、
+上記のmoltemplate生成のひな型（system.in)を下記コマンド入力でメモ帳で読める(改行)形式に変換・コピーして作成する。
+</P>
+<P>
+unix2dos -n system.in em.txt
+</P>
+<P>
+次に、このem.txtをメモ帳等で開き、例えば下記の様に追記、改変する。<BR>
+WSLコンソールからのメモ帳の起動は、
+</P>
+<P>
+notepad.exe em.txt
+</P>
+<P>
+で可能である。
+</P>
+<PRE>
+# ----------------- Init Section -----------------
+
+include "system.in.init"
+
+
+# ----------------- Atom Definition Section -----------------
+
+read_data "system.data"
+
+# ----------------- Settings Section -----------------
+
+include "system.in.settings"
+
+<font color=red>
+thermo_style    custom step etotal
+thermo          10
+</font>
+
+# ----------------- Run Section -----------------
+
+# The lines above define the system you want to simulate.
+# What you do next is up to you.
+# Typically a user would minimize and equilibrate
+# the system using commands similar to the following:
+#  ----   examples   ----
+#
+#  -- minimize --
+<font color=red>
+  minimize 1.0e-5 1.0e-7 1000 10000
+</font>
+# (Note: Some fixes, for example "shake", interfere with the minimize command,
+#        You can use the "unfix" command to disable them before minimization.)
+#  -- declare time step for normal MD --
+# timestep 1.0
+#  -- run at constant pressure (Nose-Hoover)--
+# fix   fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
+#  -- ALTERNATELY, run at constant volume (Nose-Hoover) --
+# fix   fxnvt all nvt temp 300.0 300.0 500.0 tchain 1
+#  -- ALTERNATELY, run at constant volume using Langevin dynamics. --
+#  -- (This is good for sparse CG polymers in implicit solvent.)   --
+# fix fxLAN all langevin 300.0 300.0 5000 48279
+# fix fxNVE all nve  #(needed by fix langevin)
+#  -- Now, finally run the simulation --
+# run   50000
+#  ---- (end of examples) ----
+
+<font color=red>
+write_data bpy-128_min.lmp
+</font>
+</PRE>
+<P>
+<font color=red>赤字部分が追記・改変部分である。</font>
+</P>
+
+<P>
+以上で、エネルギー最小化計算の準備が出来た。
+実際にエネルギー最小化計算を行う具体的なコマンドラインは次のようになる。
+</P>
+<P>
+lammps < em.txt
+</P>
+
+<P>
+上記実行すると、エネルギーがより低い状態に落ちていく過程がメッセージ出力され、必要に応じて複数回に分けてエネルギー最小化を行う。<BR>
+上記のエネルギー最小化後の座標等を含む出力ファイル（bpy-128_min.lmp）をVMDで可視化するには、まず。下記の様に atomsk で pdb ファイルにフォーマット変換する。
+</P>
+<P>
+atomsk bpy-128_min.lmp pdb
+</P>
+その後、
+<p>
+vmd.exe bpy-128_min.pdb
+</p>
+で可視化できる。
+
+<h5 class="subsubsectionHead">2.2 スタートアップ MD 計算</h5>
+
+<p>
+上記のようにしてエネルギー最小化された構造を得たので、いよいよ MD 計算を行う。
+エネルギー最小化された構造には原子の速度の情報が無いので、適当な温度を設定し、それに対応したボルツマン分布での原子速度生成を設定（下記スクリプト中のvelocity行) し、スタートアップ MD をまず行う。 <BR>
+
+<p>
+エネルギー最小化計算の時と同様に、まず、moltemplate生成のひな型（system.in)をunix2dosコマンドでメモ帳で読める形式に変換・コピーして su.txt 等の名前で作成し、このsu.txtをメモ帳等で開き、例えば下記の様に追記、改変する。
+</P>
+<PRE>
+# ----------------- Init Section -----------------
+
+include "system.in.init"
+
+
+# ----------------- Atom Definition Section -----------------
+
+<FONT color=red>
+read_data bpy-128_min.lmp
+</FONT>
+
+# ----------------- Settings Section -----------------
+
+include "system.in.settings"
+
+<font color=red>
+thermo_style    custom step etotal temp press
+thermo          10
+
+velocity        all create 300 4928459 dist gaussian
+</font>
+
+# ----------------- Run Section -----------------
+
+# The lines above define the system you want to simulate.
+# What you do next is up to you.
+# Typically a user would minimize and equilibrate
+# the system using commands similar to the following:
+#  ----   examples   ----
+#
+#  -- minimize --
+# minimize 1.0e-5 1.0e-7 1000 10000
+# (Note: Some fixes, for example "shake", interfere with the minimize command,
+#        You can use the "unfix" command to disable them before minimization.)
+#  -- declare time step for normal MD --
+<font color=red>
+  timestep 1.0
+</font>
+#  -- run at constant pressure (Nose-Hoover)--
+# fix   fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
+#  -- ALTERNATELY, run at constant volume (Nose-Hoover) --
+<font color=red>
+  fix   fxnvt all nvt temp 300.0 300.0 500.0 tchain 1
+</font>
+#  -- ALTERNATELY, run at constant volume using Langevin dynamics. --
+#  -- (This is good for sparse CG polymers in implicit solvent.)   --
+# fix fxLAN all langevin 300.0 300.0 5000 48279
+# fix fxNVE all nve  #(needed by fix langevin)
+#  -- Now, finally run the simulation --
+<font color=red>
+  run   5000
+</font>
+#  ---- (end of examples) ----
+
+<font color=red>
+write_data bpy-128_su.lmp
+</font>
+</PRE>
+<P>
+<font color=red>赤字部分が追記・改変部分である。</font>
+<BR>
+上記の例では、初期温度は 300K に設定され、時間刻み 1 fs で 5000 ステップ (トータル 5 ps) 計算している。
+</P>
+
+<P>
+これを用いてスタートアップ MD を行う。
+</P>
+
+<P>
+lammps < su.txt
+</P>
+
+<P>
+上記のスタートアップ MD 後の座標等を含む出力ファイル（bpy-128_su.lmp）も、前述のようにVMDで可視化できる。
+</P>
+
+<h5 class="subsubsectionHead">2.3 継続 MD 計算</h5>
+
+<p>
+<p>
+上記のスタートアップMD計算以降は、write_data コマンドで書き出した LAMMPSデータファイル（上記の例では、bpy-128_su.lmp）中の原子の速度を用い、velocity コマンドを省く事が可能である。<BR>
+<p>
+上記と同様に、スクリプトファイルを md.txt 等の名前で作成し、このmd.txtをメモ帳等で開き、例えば下記の様に追記、改変する。
+</P>
+<PRE>
+# ----------------- Init Section -----------------
+
+include "system.in.init"
+
+
+# ----------------- Atom Definition Section -----------------
+
+<FONT color=red>
+read_data bpy-128_su.lmp
+</FONT>
+
+# ----------------- Settings Section -----------------
+
+include "system.in.settings"
+
+<font color=red>
+thermo_style    custom step etotal temp press
+thermo          10
+
+dump            1 all xtc 10 bpy-128_md.xtc
+dump_modify     1 unwrap yes
+</font>
+
+# ----------------- Run Section -----------------
+
+# The lines above define the system you want to simulate.
+# What you do next is up to you.
+# Typically a user would minimize and equilibrate
+# the system using commands similar to the following:
+#  ----   examples   ----
+#
+#  -- minimize --
+# minimize 1.0e-5 1.0e-7 1000 10000
+# (Note: Some fixes, for example "shake", interfere with the minimize command,
+#        You can use the "unfix" command to disable them before minimization.)
+#  -- declare time step for normal MD --
+<font color=red>
+  timestep 1.0
+</font>
+#  -- run at constant pressure (Nose-Hoover)--
+<font color=red>
+  fix   fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
+</font>
+#  -- ALTERNATELY, run at constant volume (Nose-Hoover) --
+# fix   fxnvt all nvt temp 300.0 300.0 500.0 tchain 1
+#  -- ALTERNATELY, run at constant volume using Langevin dynamics. --
+#  -- (This is good for sparse CG polymers in implicit solvent.)   --
+# fix fxLAN all langevin 300.0 300.0 5000 48279
+# fix fxNVE all nve  #(needed by fix langevin)
+#  -- Now, finally run the simulation --
+<font color=red>
+  run   5000
+</font>
+#  ---- (end of examples) ----
+
+<font color=red>
+write_data bpy-128_md.lmp
+</font>
+</PRE>
+
+<P>
+これを用いて継続 MD を行う。
+</P>
+
+<P>
+lammps < md.txt
+</P>
+
+<P>
+上記の計算では、dump行で指定した 10 ステップ毎に、ファイル bpy-128_md.xtc に計算途中の原子トラジェクトリを出力している。
+このトラジェクトリ出力は、後で種々の解析に用いたり、可視化プログラムvmd等でアニメーションとして見る事ができる。
+</P>
+
+<P>
+トラジェクトリファイル bpy-128_md.xtc をアニメーションとして見るには、まず下記の手順で、VMD でLAMMPSデータから psf ファイルを作成する必要がある。
+</p>
+<FONT color=red>
+下記一部変更しました。
+</FONT>
+<!--
+<p>
+ます、VMDを左下隅のウインドウズアイコンからアプリメニューを表示させ、その中の University of Illinoisの下の VMD1.9.2 をクリックすることで起動する。<BR>
+三つのウインドウの内、"vmd >" と最終行に表示されている黒いコンソールウインドウをアクティブにし、下記コマンド入力により、上記でのLAMMPS計算結果のあるフォルダに移動する。
+</p>
+<P>
+cd C:/Users/ユーザー名（あるいはPublic）
+</P>
+-->
+<P>
+まず、準備として下記内容で、ファイル lmp2psf.txt を作成する。
+</P>
+<P>
+package require topotools<BR>
+topo readlammpsdata bpy-128_md.lmp full<BR>
+topo guessatom lammps data<BR>
+animate write psf bpy-128_md.psf<BR>
+quit
+</P>
+<P>
+このファイルを用いてWSLコンソールに次のコマンドを入力し、vmd でスクリプト実行する。
+</P>
+<P>
+vmd.exe -dispdev text -e lmp2psf.txt
+</P>
+<P>
+上記により bpy-128_md.psf ファイルが生成され、それを用いて WSLコマンドプロンプトで、
+</P>
+<P>
+vmd.exe bpy-128_md.psf bpy-128_md.xtc
+</P>
+<P>
+と入力することにより VMD でトラジェクトリーがアニメーションとして見る事が出来る。<BR>
+アニメーションの再生・停止等は、Mainウインドウ下部のそれぞれのボタンを押すことにより可能である。<BR> 
+</P>
+
+<h3 class="sectionHead">3.  おわりに</h3>
+
+<p>
+フリーに入手できるソフトウエアにより、手元の WindowsPC で MD 計算を実感して頂くことを念頭に、実践的な演習を試みた。
+（注意本稿の内容や、関連するプログラムの実行の結果発生した PC 障害等に関しては一切保障できないので、くれぐれもオウンリスクにて実行願います）。
+</P>
+<P>
+時間の関係上、 LAMMPS や moltemplate 等のコマンド及びそのオプション等についても、詳しい説明ができなかったが、それぞれホームページに詳細なマニュアルがあるので、必要に応じて御確認頂きたい。
+</P>
+<P>
+なお、最初に説明した方法でインストールした LAMMPS のバージョンは古いので、<a href="https://winmostar.com/jp/WSL_jp.html"> ここ </a>等を参考に自分で最新版をインストールするのが望ましい。
+</P>
+
+
+<h3 class="likesectionHead">付録 A: Gaussian を用いた RESP 電荷 Sybyl-mol2 ファイルの生成方法</h3>
+
+<P>
+まず、antechamberコマンドを用いて MDL-mol ファイルから Gaussian 計算インプットファイルを下記のコマンドにより作成する。
+</P>
+<P>
+antechamber -fi mdl -i bpy.mol -fo gcrt -o bpy.com
+</P>
+<P>
+これを用い、 Gaussian09 プログラム等を用いて例えば、
+</P>
+<P>
+g09 bpy.com
+</P>
+<P>
+等により非経験分子軌道計算を行い、その log ファイルbpy.logを用いて、 RESP 電荷を次のようにして計算し、それを格納した Sybyl-mol2 ファイルを得る。
+</P>
+<P>
+antechamber -fi gout -i bpy.log -fo mol2 -o bpy.mol2 -at gaff -c resp
+</P>
+<P>
+後はこのmol2ファイルを用いて、上記と同様に mol22lt.pl を用いて moltemplate のテンプレートファイルを作成する。
+</P>
+
+<P>
+オリジナルの<a href="https://github.com/choderalab/ambermini/blob/master/README.md"> ambermini </A>は、上記のRESP電荷を計算をするプログラム（resp）を含んでいないが、本稿冒頭にてダウンロードしたものには追加してあるので上記RESP電荷計算が可能となっている。
+</P>
+
+</BLOCKQUOTE></BLOCKQUOTE>
+
+<HR WIDTH=90% ALIGN="CENTER">
+
+<P ALIGN="center">
+	<A HREF="../">HOME</A>
+</P>
+
+<P ALIGN="center">
+	2019年09月25日更新<BR>
+	<I><A HREF="mailto:makoto-yoneya@aist.go.jp">makoto-yoneya@aist.go.jp</A> </I>
+</P>
+
+</BODY>
+</HTML>

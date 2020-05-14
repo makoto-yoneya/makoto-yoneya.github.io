@@ -1,0 +1,443 @@
+<HTML>
+<meta http-equiv="content-type" charset="utf-8">
+
+<BODY BGCOLOR="white">
+
+<HEAD>
+	<TITLE>
+		LAMMPSと連携ソフトウエアによる無機材料の分子動力学計算
+	</TITLE>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-30624012-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</HEAD>
+<BR>
+
+<P>
+<HR WIDTH=60% ALIGN="center">
+	<H2 ALIGN="center"><FONT COLOR="crimson">
+		「LAMMPSと連携ソフトウエアによる無機材料の分子動力学計算」</H2>
+	</FONT>
+
+<HR WIDTH=60% ALIGN="center">
+</P>
+
+<P>
+<H4 ALIGN="center">
+	米谷　慎
+</H4>
+</P>
+<BR>
+
+<BLOCKQUOTE>
+<BLOCKQUOTE>
+<BLOCKQUOTE>
+<BLOCKQUOTE>
+フリーな分子動力学計算プログラムの一つである <a href="https://lammps.sandia.gov/">LAMMPS</A> と連携ソフトウエアを用いて、無機・金属材料の分子動力学計算を WindowsPC を用いて行う方法を説明する。
+<BR>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<BR>
+
+<P>
+<H2 ALIGN="center"><FONT COLOR="crimson">使用ソフトとインストール方法
+</FONT></H2>
+<HR WIDTH=50% ALIGN="center">
+</P>
+
+<BLOCKQUOTE><BLOCKQUOTE>
+
+<P>
+<B>LAMMPS</B>
+</P>
+<P>
+分子動力学シミュレーションソフトLAMMPSは、<a href="https://rpm.lammps.org/windows/">ここ</a>から Windows 版をダウンロード可能である。<BR>
+ダウンロードしたインストーラーファイル LAMMPS-32bit-stable.exe (64bitOSの場合は LAMMPS-64bit-stable.exe）をダブルクリックして、後は表示に従えば、一般のwindowsアプリケーションと同様にインストールできる。
+</P>
+
+<P>
+<B>Atomsk</B>
+</P>
+<P>
+分子シミュレーションの支援ソフト<a href="http://atomsk.univ-lille1.fr/"> atomsk </A>の Windows 版を<a href="http://atomsk.univ-lille1.fr/dl.php">ここ</a>からダウンロードする。<BR>
+ダウンロードした zip ファイル atomsk_b0.10.6_Windows.zip を展開し、展開フォルダ中のインストーラー Atomsk_setup.exe をダブルクリックして、後は表示に従えば、一般のwindowsアプリケーションと同様にインストールできる。
+</P>
+
+<B>VMD (Visual Molecular Dynamics)</B>
+</P>
+<P>
+MD計算のスナップショットや、アニメーションの表示に用いる分子表示ソフト。<BR>
+VMD は、<a href="http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD">ホームページ</a>から Windows 版をダウンロード可能である。<BR>
+ダウンロードしたインストーラーファイルをダブルクリックして、後は表示に従えば、一般のwindowsアプリケーションと同様にインストールできる。
+</P>
+
+<P>
+以上の三つプログラムを使用するコマンドパス等をセットするためのバッチファイル LMPRC.bat を下記の内容、
+</P>
+<PRE>
+@echo off 
+REM 
+REM Open DOS window with specified PATH setting. 
+REM 
+SET VMD_ROOT="C:\Program Files (x86)\University of Illinois"
+SET VMDDIR=%VMD_ROOT%\VMD
+SET ASKDIR="C:\Program Files (x86)\Atomsk"
+SET LMPHOME=C:\Program Files (x86)\LAMMPS 32-bit 5Jun2019
+REM SET LMPHOME=C:\Program Files\LAMMPS 64-bit 5Jun2019
+SET LAMMPS_POTENTIALS=%LMPHOME%\Potentials
+SET PATH=%LMPHOME%\bin;%ASKDIR%;%VMDDIR%;%PATH%
+IF "%1" EQU "" %windir%\system32\cmd.exe
+</PRE>
+<P>
+<FONT COLOR=RED>更新情報<BR>
+SET LAMMPS_POTENTIALS=%LMPHOME%\Potentials を追加。</FONT><BR>
+</P>
+<P>
+をコピー・ペーストし、メモ帳（Windowsアクセサリの中にある）等で（テキストファイルとして）作成し、LMPRC.bat というファイル名で保存する。<BR>
+上記は、32bit版のLAMMPSの場合だが、64bit版をインストールした場合は、すぐ下のREM（注釈行）の付いた行のREMを除き、
+代りにその上の行（32bit版用）の行頭にREM を入れる。<BR>
+また、インストールしたLAMMPSのファイル名の特に最後の "5Jun2019" の部分が異なる場合はそれに合わせて上記の内容も変更する。
+</P>
+
+<P>
+以上で、演習環境が整うはずである。
+</P>
+
+</BLOCKQUOTE></BLOCKQUOTE>
+<BR>
+
+<P>
+<H2 ALIGN="center"><FONT COLOR="crimson">演習内容
+</FONT></H2>
+<HR WIDTH=50% ALIGN="center">
+</P>
+
+<BLOCKQUOTE><BLOCKQUOTE> 
+
+<P>
+<h4 class="subsectionHead">1. 初期構造作成</h4>
+</P>
+
+<P>
+例えば、シリコンのダイヤモンド構造などは、LAMMPSのコマンドで簡単に作成できる（例えば<a href="https://qiita.com/tkmtSo/items/b4bd8dabb8005ac8dbfb">ここ</a>参照）。<BR>
+一方、atomsk を用いると、結晶粒界や、点欠陥構造等、様々な構造の作成が可能なので、より多様な初期構造作成が可能である。<BR>
+ここでは、LAMMPSのコマンドではダイヤモンド構造ほど簡単で無い場合の例として、窒化ガリウム(GaN)の初期構造を atomsk で作成する例を示す。
+</P>
+
+<P>
+まず、上記でバッチファイル LMPRC.bat を作成したフォルダで、この LMPRC.bat をダブルクリックし、LAMMPS等のコマンドパスの設定された、Windowsのコマンドプロンプト（黒いDOS窓）を起動する。<BR>
+<FONT color=red>以後のコマンド入力はこの環境で行う</FONT>。<BR>
+まず、atomsk を用いて GaN-Wurzite結晶ユニットセル構造を作成する。<BR>
+具体的には、次のコマンドを入力する。
+</P>
+
+<P>
+atomsk --create wurzite 3.18 5.17 Ga N -orthogonal-cell GaN-uc.lmp
+</P>
+
+<P>
+上記では、wirzite型結晶を、a, c軸格子定数 3.18, 5.17、Ga, N 原子を指定して作成し、構造ファイル GaN-uc.pdb を lammpsデーターフォーマットで出力している。<BR>
+-orthogonal-cell は、構造を等価な直方体で作成することを指定するもので、これが無い場合は菱面体構造が生成される。<BR>
+この指定は、LAMMPSが直方体に近いセルでの計算が好まれるためである。
+</P>
+
+<P>
+上記で生成された構造ファイル GaN-uc.lmp を、プログラムvmdにより可視化するには、まず pdbファイル形式に変換する。<BR>
+</p>
+
+<P>
+atomsk GaN-uc.lmp pdb
+</P>
+
+<P>
+上記で変換された座標ファイル（拡張子が.pdbの pdb座標フォーマット）は、プログラムvmdにより図１のように可視化できる。<BR>
+具体的には"コマンドプロンプト"で、
+</p>
+
+<p>
+vmd GaN-uc.pdb
+</p>
+
+<p>
+とコマンド入力する。<BR>
+最初は何も表示されないので、VMD Main ウインドウの"Graphcs - Representations" メニューを選択し、中段左の "Drawing Method" で、"VDW"（あるいは "CPK"）を選択すると、原子が表示される。
+</p>
+
+<CENTER>
+<P>
+<img src="images/GaN-uc.jpg" alt="PIC" class="graphics">
+</P>
+
+<P>
+Fig. 1 Drawing Wirzite GaN with VMD
+</P>
+</CENTER>
+
+<P>
+構造の回転等の操作は、ウインドウ内でマウスボタンを押しながらマウスを動かすことにより可能である。<BR>
+セルは、vmdを実行したコマンドプロンプトで、<BR>
+<!--
+ExtensionsメニューからTK Consoleを選択すると表示されるウインドウで、<BR>
+-->
+pbc box<BR>
+と入力するか、あるいは、VMDのインストールフォルダにあるvmd.rcというファイルの最後に<BR>
+user add key b {pbc box -color green}<BR>
+を追加・保存し、分子表示画面がアクティブな状態でキーボードのｂを押すと表示できる。<BR>
+終了は File メニューから Quit を選択する。
+</P>
+
+<P>
+上記で作成した単位格子構造から、実際のMD計算の初期構造で使うより大きなサイズの結晶構造を作成するには、下記コマンドを入力する。
+</P>
+
+<P>
+atomsk GaN-uc.pdb -duplicate 5 5 5 GaN-5x5x5.pdb
+</P>
+
+<P>
+上記では、元の構造をa,b,c軸方向に5x5x5した構造を作成する。<BR>
+作成された構造ファイル、GaN-5x5x5.pdb も同様に VMD で可視化して確認できる（図２）。
+</P>
+
+<CENTER>
+<P>
+<img src="images/GaN-5x5x5.jpg" alt="PIC" class="graphics">
+</P>
+
+<P>
+Fig. 2 Wirzite GaN (5x5x5 unit cells) with VMD
+</P>
+</CENTER>
+
+<h4 class="subsectionHead">2. LAMMPSによるシミュレーション</h4>
+
+<h5 class="subsubsectionHead">2.1 初期構造の準備</h5>
+
+<P>
+前節で作成した構造を、LAMMPSで計算に使うには構造出力をLAMMPSデータフォーマットで出力する必要がある。<BR>
+具体的には、
+</P>
+
+<P>
+atomsk GaN-uc.lmp -duplicate 5 5 5 GaN-5x5x5.lmp
+</P>
+
+<P>
+コマンドにより、LAMMPSデーターフォーマットでの構造ファイル GaN-5x5x5.lmp が作成できる。
+</P>
+
+<h5 class="subsubsectionHead">2.2  エネルギー最小化計算</h5>
+
+<p>
+原理的にはこの時点でも MD 計算を始めることが可能である。
+しかし、人為的に作成した初期構造は時として場合により近接した原子を含む場合がある。
+このような状態から MD 計算を始めると、上記の近接原子に起因した高いエネルギーが運動エネルギーに変換され、 MD 計算における時間積分が不安定となる。
+したがって、このような高エネルギー構造を緩和する目的で、まずエネルギー最小化を行うのが一般的である。
+</P>
+
+<!--
+<P>   
+エネルギー最小化計算を行うには、まずエネルギー計算の基となるポテンシャルパラメータを用意する必要がある。<BR>
+LAMMPSのインストールフォルダ、<BR>
+"C:\Program Files (x86)\LAMMPS 32-bit 5Jun2019"（あるいは C:\Program Files\LAMMPS 64-bit 5Jun2019"）<BR>
+中の、Potentials フォルダには、種々のポテンシャルパラメーターファイルがある。<BR>
+今回は、GaN系の計算をするので、この中から GaN.tersoff ファイルを、上記で構造ファイル等を作成したフォルダーにコピーする。
+</P>
+-->
+<P>
+<FONT COLOR=RED>更新情報<BR>
+以前必要だった、 GaN.tersoff ファイルのコピーは環境変数の追加により不要になりました。</FONT><BR>
+</P>
+<p>
+エネルギー最小化計算のスクリプトファイルの内容として、下記の内容をコピー・ペーストして、メモ帳等で（テキストファイルとして）作成し、
+GaN-min.txt というファイル名で保存する。
+</P>
+
+<PRE>
+units		metal
+atom_style	atomic
+boundary	p p p
+
+read_data	GaN-5x5x5.lmp
+
+pair_style	tersoff
+pair_coeff	* * GaN.tersoff Ga N
+
+thermo_style	custom step etotal vol press
+thermo		10
+
+fix		1 all box/relax aniso 0.0
+minimize	0.0 1.0e-10 1000 10000
+
+write_data	GaN-5x5x5-min.lmp
+</PRE>
+
+<P>
+上記スクリプトファイル中では、<BR>
+最初の３行で基本的な初期設定を行い、<BR>
+read_data コマンドで、atomsk で作成した構造ファイル GaN-5x5x5.lmp を読み、<BR>
+pair_style コマンドで、tersoff 型のポテンシャルを設定し、pair_coeff コマンドで、パラメータファイル GaN.tersoff を指定し、<BR>
+thermo_style コマンドで、熱力学的変数の出力内容を設定し、thermo コマンドで、10 ステップ毎に出力する様設定し、<BR>
+fix コマンドで、エネルギー最小化計算の内容を設定（ここでは、計算セルを非等方的に緩和）し、<BR>
+minimize コマンドで 上限 1000 ステップのエネルギー最小化計算を実行し、得られた構造を、<BR>
+write_data コマンドで LAMMPS データーフォーマットで、GaN-5x5x5-min.lmp として出力する様設定している。
+</P>
+
+<P>
+上記のスクリプトを用いたエネルギー最小化計算は、コマンドプロンプトで、
+</P>
+
+<P>
+lmp_serial < GaN-min.txt
+</P>
+
+<P>
+と入力、実行する。<BR>
+実行時に画面表示もされるが、ログファイル log.lammps に、上記 thermo_style コマンドで指定した内容で、エネルギー等がより低い状態に落ちていく過程が確認できる。<BR>
+エネルギー最小化後の出力座標ファイル、GaN-5x5x5-min.lmp も前述の様に atomsk で pdb ファイルに変換して VMD で可視化して確認できる。
+</P>
+
+<h5 class="subsubsectionHead">2.3 スタートアップ MD 計算</h5>
+
+<p>
+上記のようにしてエネルギー最小化された構造を得たので、いよいよ MD 計算を行う。
+エネルギー最小化された構造には原子の速度の情報が無いので、適当な温度を設定し、それに対応したボルツマン分布での原子速度生成を設定（下記の velocity コマンド行) し、
+スタートアップ MD をまず行う。 <BR>
+スクリプトファイルは例えば以下のように設定する。
+</P>
+
+<PRE>
+units		metal
+atom_style	atomic
+boundary	p p p
+
+read_data	GaN-5x5x5-min.lmp
+
+pair_style	tersoff
+pair_coeff	* * GaN.tersoff Ga N
+
+thermo_style	custom step etotal temp press
+thermo		10
+
+velocity	all create 2500 4928459 dist gaussian
+
+timestep	0.001
+
+fix		1 all nvt temp 2500.0 2500.0 0.1
+run		1000
+
+write_data	GaN-5x5x5-su.lmp
+</PRE>
+
+<p>
+上記の内容を、GaN-su.txt 等のファイル名で作成・保存し、コマンドプロンプトで、
+</P>
+
+<P>
+lmp_serial < GaN-su.txt
+</P>
+
+<P>
+と入力、実行する。<BR>
+上記の例では、エネルギー最小化された構造を初期構造として読み込み、初期温度は 2500 K に設定され、時間刻み 0.001 ps  で 1000 ステップ (トータル 1 ps) NVT（粒子数、体積、温度一定）条件で計算している。<BR>
+この出力座標ファイル、GaN-5x5x5-su.lmp も前述の様に atomsk で pdb ファイルに変換して VMD で可視化して確認できる。
+</P>
+
+<h5 class="subsubsectionHead">2.4 継続 MD 計算</h5>
+
+<p>
+上記のスタートアップMD計算以降は、write_data コマンドで書き出した GaN-5x5x5-su.lmp ファイル中の原子の速度を用い、velocity コマンドを省く事が可能である。<BR>
+スクリプトファイルは例えば以下のようになる。
+</P>
+
+<PRE>
+units		metal
+atom_style	atomic
+boundary	p p p
+
+read_data	GaN-5x5x5-su.lmp
+
+pair_style	tersoff
+pair_coeff	* * GaN.tersoff Ga N
+
+thermo_style	custom step etotal temp press
+thermo		10
+
+dump		1 all atom 10 GaN-5x5x5-md.lammpstrj
+
+timestep	0.001
+
+fix		1 all nvt temp 2500.0 2500.0 0.1
+run		10000
+
+write_data	GaN-5x5x5-md.lmp
+</PRE>
+
+<p>
+上記を、GaN-su.txt と同様にして、”メモ帳”等のエディタで、ファイル名 GaN-md.txt として作成する。<BR>
+上記スクリプトでは、read_data コマンドで読み込んだ GaN-5x5x5-su.lmp ファイル中の原子の速度を用いるため、
+GaN-su.txt にあった volocity コマンドが無い。<BR>
+一方で、dump コマンドにて、原子座標が 10 ステップ毎に書き出す設定が追加されている。<BR>
+上記スクリプトを用いて、下記の様に MD計算を行う。
+</P>
+
+<P>
+lmp_serial < GaN-md.txt
+</P>
+
+<P>
+前述の様に、上記の計算ではファイル GaN-5x5x5-md.lammpstrj に計算途中の原子トラジェクトリを出力している。
+このトラジェクトリ出力は、可視化プログラム vmd でアニメーションとして見る事ができる。
+</P>
+
+<P>
+トラジェクトリファイル GaN-5x5x5-md.lammpstrj をアニメーションとして見るには、
+</p>
+
+<p>
+vmd GaN-5x5x5-md.lammpstrj
+</p>
+
+<P>
+とコマンド入力すれば良い。<BR>
+アニメーションの再生・停止等は、Mainウインドウ下部のそれぞれのボタンを押すことにより可能である。
+</P>
+
+<h3 class="sectionHead">4.  おわりに</h3>
+
+<p>
+フリーに入手できるソフトウエアにより、手元の WindowsPC で MD 計算を実感して頂くことを念頭に、実践的な演習を試みた。
+（注意本稿の内容や、関連するプログラムの実行の結果発生した PC 障害等に関しては一切保障できないので、くれぐれもオウンリスクにて実行願います）。
+</P>
+
+<P>
+時間の関係上、 LAMMPS や atomsk のコマンド及びそのオプション等についても、詳しい説明ができなかったが、それぞれホームページに詳細なマニュアルがあるので、必要に応じて御確認頂きたい。
+</P>
+
+</BLOCKQUOTE></BLOCKQUOTE>
+
+<HR WIDTH=90% ALIGN="CENTER">
+
+<P ALIGN="center">
+	<A HREF="../">HOME</A>
+</P>
+
+<P ALIGN="center">
+	2019年08月25日更新<BR>
+	<I><A HREF="mailto:makoto-yoneya@aist.go.jp">makoto-yoneya@aist.go.jp</A> </I>
+</P>
+
+</BODY>
+</HTML>
