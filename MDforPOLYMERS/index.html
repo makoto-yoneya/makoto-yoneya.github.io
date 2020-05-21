@@ -89,18 +89,16 @@ Windows 10 64bit でubuntu等のLINUXを利用可能とするMicrosof提供の�
 WSLのインストール法についてはネット上に多くの情報があるので、
 例えば<a href="https://qiita.com/Aruneko/items/c79810b0b015bebf30bb">ここ</A>等を参照してインストールする。
 </P>
-<!--
 <P>
 WSLインストール後に、WSLを起動して後に必要となるプログラムを追加しておく。<BR>
 まず、左下隅のWindowsアイコン - アプリリストから ubuntu ***（あるいは Bash on Ubuntu on Windows）を選択して WSL のコンソールを起動し、
 下記コマンドを入力する。
 </P>
 <P>
-sudo apt install dos2unix python-pip libgfortran3 liblapack-dev
+sudo apt install libgfortran3
 </P>
 <P>
 上記コマンド実行時に、WSLのインストール時に入力したユーザーパスワード入力を求められるので入力する。<BR>
--->
 <P>
 下記内容は、WSL の ubuntu 18.04LTSで検証しているが、ubuntu 別バージョンの場合には他にも追加インストールが必要な場合がある。
 </P>
@@ -117,9 +115,11 @@ sudo apt install dos2unix python-pip libgfortran3 liblapack-dev
 sudo apt install gromacs
 </P>
 
+<!--
 <P>
 上記コマンド実行時に、WSLのインストール時に入力したユーザーパスワード入力を求められるので入力する。
 </P>
+-->
 
 <P>
 インストール終了後に、下記コマンドを入力して、
@@ -134,15 +134,20 @@ which gmx
 </P>
 
 <P>
-と表示されればGromaxsのインストールが確認できる。
+と表示されればGromacsのインストールが確認できる。
 </P>
 
-<B>ambermini, mol22rtp.pl他</B>
+<B>antechamber, mol22rtp.pl他</B>
 </P>
 <P>
 次に、
-general AMBER 力場を使うための支援プログラム<a href="https://github.com/choderalab/ambermini/blob/master/README.md"> ambermini </A>、
+general AMBER 力場を使うための支援プログラム<a href="http://ambermd.org/antechamber/antechamber.html"> antechamber </A>、
 SYBYL-mol2ファイルを残基トポロジーファイルに変換するスクリプトmol22rtp.pl等をダウンロード・インストールする。
+</P>
+
+<P>
+<FONT COLOR=RED>更新情報</FONT><BR>
+antechamber を AmberTools20 ベースの物に変更。
 </P>
 
 <P>
@@ -1277,10 +1282,6 @@ antechamber -fi gout -i 3lla.log -fo mol2 -o 3lla.mol2 -at gaff -c resp
 後はこのmol2ファイルを用いて、上記と同様に mol22rtp.pl を用いて残基トポロジーファイルを作成する。
 </P>
 
-<P>
-オリジナルの<a href="https://github.com/choderalab/ambermini/blob/master/README.md"> ambermini </A>は、上記のRESP電荷を計算をするプログラム（resp）を含んでいないが、本稿冒頭にてダウンロードしたものには追加してあるので上記RESP電荷計算が可能となっている。
-</P>
-
 </BLOCKQUOTE></BLOCKQUOTE>
 
 <HR WIDTH=90% ALIGN="CENTER">
@@ -1290,7 +1291,7 @@ antechamber -fi gout -i 3lla.log -fo mol2 -o 3lla.mol2 -at gaff -c resp
 </P>
 
 <P ALIGN="center">
-	2020年05月09日更新<BR>
+	2020年05月21日更新<BR>
 	<I><A HREF="mailto:makoto-yoneya@aist.go.jp">makoto-yoneya@aist.go.jp</A> </I>
 </P>
 

@@ -136,16 +136,19 @@ sh install_moltemplate.sh
 これによって、moltemplateが自動ダウンロード・インストールされる。
 </P>
 
-<B>packmol, atomsk, ambermini, mol22lt.pl</B>
+<B>packmol, atomsk, antechamber, mol22lt.pl</B>
 </P>
 <P>
 次に、初期構造作成支援プログラム<a href="http://m3g.iqm.unicamp.br/packmol/home.shtml"> packmol </A>と、
 LAMMPSファイルフォーマット変換等を行うプログラム<a href="http://atomsk.univ-lille1.fr/"> atomsk </A>、
-general AMBER 力場を使うための支援プログラム<a href="https://github.com/choderalab/ambermini/blob/master/README.md"> ambermini </A>、
+general AMBER 力場を使うための支援プログラム<a href="http://ambermd.org/antechamber/antechamber.html"> antechamber </A>、
 SYBYL-mol2ファイルをmoltemplateの入力分子テンプレートファイルに変換するスクリプトmol22lt.plをダウンロード・インストールする。
 </P>
-<FONT COLOR=RED>更新情報<BR>
-ambermini を AmberTools16 ベースから AmberTools19 ベースの物に変更。</FONT><BR>
+
+<P>
+<FONT COLOR=RED>更新情報</FONT><BR>
+antechamber を AmberTools20 ベースの物に変更。
+</P>
 <P>
 上記と同様に、WSLコンソールで下記のコマンドを入力して上記をインストールするスクリプトファイルをダウンロードする。
 </P>
@@ -802,10 +805,6 @@ antechamber -fi gout -i bpy.log -fo mol2 -o bpy.mol2 -at gaff -c resp
 後はこのmol2ファイルを用いて、上記と同様に mol22lt.pl を用いて moltemplate のテンプレートファイルを作成する。
 </P>
 
-<P>
-オリジナルの<a href="https://github.com/choderalab/ambermini/blob/master/README.md"> ambermini </A>は、上記のRESP電荷を計算をするプログラム（resp）を含んでいないが、本稿冒頭にてダウンロードしたものには追加してあるので上記RESP電荷計算が可能となっている。
-</P>
-
 </BLOCKQUOTE></BLOCKQUOTE>
 
 <HR WIDTH=90% ALIGN="CENTER">
@@ -815,7 +814,7 @@ antechamber -fi gout -i bpy.log -fo mol2 -o bpy.mol2 -at gaff -c resp
 </P>
 
 <P ALIGN="center">
-	2019年09月25日更新<BR>
+	2020年05月21日更新<BR>
 	<I><A HREF="mailto:makoto-yoneya@aist.go.jp">makoto-yoneya@aist.go.jp</A> </I>
 </P>
 
