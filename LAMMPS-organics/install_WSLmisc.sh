@@ -20,11 +20,12 @@ else
 	echo "* moving to $HOME/bin dir."
 	cd  $HOME/bin
 	echo "** installing atomsk"
-#	wget https://atomsk.univ-lille.fr/code/atomsk_b0.10.6_Linux-amd64.tar.gz
-#	tar zxvf atomsk_b0.10.6_Linux-amd64.tar.gz
-#	ln atomsk_b0.10.6_Linux-amd64/atomsk .
-	wget --no-check-certificate -q http://staff.aist.go.jp/makoto-yoneya/MDonWINPC/bin/atomsk
+#	wget --no-check-certificate -q http://staff.aist.go.jp/makoto-yoneya/MDonWINPC/bin/atomsk
+	wget https://atomsk.univ-lille.fr/code/atomsk_b0.10.6_Linux-amd64.tar.gz
+	tar zxvf atomsk_b0.10.6_Linux-amd64.tar.gz
+	ln atomsk_b0.10.6_Linux-amd64/atomsk .
 	chmod ugo+x atomsk
+	rm -rf atomsk_b0.10.6_Linux-amd64.tar.gz
 fi
 
 if [ -x $HOME/bin/mol22lt.pl ]; then
