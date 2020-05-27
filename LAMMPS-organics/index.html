@@ -372,7 +372,7 @@ packmol は入力座標フォーマットとして上記で作成したMDL-mol�
 具体的には、"WSLコマンドプロンプト"で次のように入力する。
 </P>
 <P>
-antechamber -dr no -fi mdl -i bpy.mol -fo pdb -o bpy.pdb
+antechamber -fi mdl -i bpy.mol -fo pdb -o bpy.pdb -dr no
 </P>
 <P>
 次に、packmol のインプットファイルを、例えば下記の内容でメモ帳（アプリメニューのWindowsアクセサリの中に有る）等で作成し、
@@ -449,7 +449,7 @@ moltemplate によるデーターファイルの作成には、まずテンプ�
 具体的には、"WSLコマンドプロンプト"で次のように入力する。
 </P>
 <P>
-antechamber -dr no -fi mdl -i bpy.mol -fo mol2 -o bpy.mol2 -at gaff -c gas -rn bpy
+antechamber -fi mdl -i bpy.mol -fo mol2 -o bpy.mol2 -at gaff -c gas -rn bpy -dr no
 </P>
 <P>
 上記実行時に、general AMBER力場(GAFF)中の原子タイプと、"-c gas" で指定した Gastiger 法による原子点電荷が割り振られ、これらの情報は moltemplate で用いられる。
@@ -842,7 +842,7 @@ vmd.exe bpy-128_md.psf bpy-128_md.xtc
 まず、antechamberコマンドを用いて MDL-mol ファイルから Gaussian 計算インプットファイルを下記のコマンドにより作成する。
 </P>
 <P>
-antechamber -dr no -fi mdl -i bpy.mol -fo gcrt -o bpy.com
+antechamber -fi mdl -i bpy.mol -fo gcrt -o bpy.com -dr no
 </P>
 <P>
 これを用い、 Gaussian09 プログラム等を用いて例えば、
@@ -854,7 +854,7 @@ g09 bpy.com
 等により非経験分子軌道計算を行い、その log ファイルbpy.logを用いて、 RESP 電荷を次のようにして計算し、それを格納した Sybyl-mol2 ファイルを得る。
 </P>
 <P>
-antechamber -dr no -fi gout -i bpy.log -fo mol2 -o bpy.mol2 -at gaff -c resp
+antechamber -fi gout -i bpy.log -fo mol2 -o bpy.mol2 -at gaff -c resp -dr no
 </P>
 <P>
 後はこのmol2ファイルを用いて、上記と同様に mol22lt.pl を用いて moltemplate のテンプレートファイルを作成する。
