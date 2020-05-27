@@ -419,7 +419,7 @@ cd /mnt/c/Users/Public
 antechamber は、具体的には、"WSLコマンドプロンプト"で次のように入力する。
 </P>
 <P>
-antechamber -fi mdl -i 3lla.mol -fo mol2 -o 3lla.mol2 -at gaff -c gas -rn LLA
+antechamber -fi mdl -i 3lla.mol -fo mol2 -o 3lla.mol2 -at gaff -c gas -rn LLA -dr no
 </P>
 <P>
 "-at gaff"で、使用する原子タイプとしてgeneral AMBER力場(GAFF)の原子タイプを割り振ることと、
@@ -485,7 +485,7 @@ rtp2hdb.pl < lla.rtp > lla.hdb
 まず、前章で作成した三量体の mol ファイルを pdb ファイル形式に下記のコマンド入力で変換する。
 </P>
 <P>
-antechamber -fi mdl -i 3lla.mol -fo pdb -o 3lla.pdb -rn LLA
+antechamber -fi mdl -i 3lla.mol -fo pdb -o 3lla.pdb -rn LLA -dr no
 </P>
 
 <P>
@@ -1264,7 +1264,7 @@ Fig. 11 modelling and simulation flowchart
 まず、antechamberコマンドを用いて MDL-mol ファイルから Gaussian 計算インプットファイルを下記のコマンドにより作成する。
 </P>
 <P>
-antechamber -fi mdl -i 3lla.mol -fo gcrt -o 3lla.com
+antechamber -fi mdl -i 3lla.mol -fo gcrt -o 3lla.com -dr no
 </P>
 <P>
 これを用い、 Gaussian09 プログラム等を用いて例えば、
@@ -1276,7 +1276,7 @@ g09 3lla.com
 等により非経験分子軌道計算を行い、その log ファイル3lla.logを用いて、 RESP 電荷を次のようにして計算し、それを格納した Sybyl-mol2 ファイルを得る。
 </P>
 <P>
-antechamber -fi gout -i 3lla.log -fo mol2 -o 3lla.mol2 -at gaff -c resp
+antechamber -fi gout -i 3lla.log -fo mol2 -o 3lla.mol2 -at gaff -c resp -dr no
 </P>
 <P>
 後はこのmol2ファイルを用いて、上記と同様に mol22rtp.pl を用いて残基トポロジーファイルを作成する。
