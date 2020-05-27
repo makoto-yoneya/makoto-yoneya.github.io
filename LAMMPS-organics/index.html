@@ -31,12 +31,6 @@
 
 <HR WIDTH=60% ALIGN="center">
 </P>
-
-<P>
-<H4 ALIGN="center">
-	産業技術総合研究所　米谷　慎
-</H4>
-</P>
 <BR>
 
 <BLOCKQUOTE>
@@ -72,16 +66,26 @@ WSLのインストール法についてはネット上に多くの情報があ�
 例えば<a href="https://qiita.com/Aruneko/items/c79810b0b015bebf30bb">ここ</A>等を参照してインストールする。
 </P>
 <P>
+<FONT COLOR=red>
+2020年5月24日追記
+</FONT>
+下記の手順はubuntu 20.04LTS で検証しました。
+<BR>
+ubuntu 18.04LTS では下記の手順でatomsk, packmol がインストール出来ません。
+</P>
+<P>
 WSLインストール後に、WSLを起動して後に必要となるプログラムを追加しておく。<BR>
-まず、左下隅のWindowsアイコン - アプリリストから ubuntu ***（あるいは Bash on Ubuntu on Windows）を選択して WSL のコンソールを起動し、
+まず、左下隅のWindowsアイコン - アプリリストから ubuntu *** を選択して WSL のコンソールを起動し、
 下記コマンドを入力する。
 </P>
-<P>
+<PRE>
+<!--
 sudo apt install dos2unix python-pip libgfortran3 liblapack-dev
-</P>
+-->
+sudo apt install dos2unix python3-pip libgfortran4 libgfortran5 liblapack3
+</PRE>
 <P>
-上記コマンド実行時に、WSLのインストール時に入力したユーザーパスワード入力を求められるので入力する。<BR>
-下記内容は、WSL の ubuntu 18.04LTSで検証しているが、ubuntu 別バージョンの場合には他にも追加インストールが必要な場合がある。
+上記コマンド実行時に、WSLのインストール時に入力したユーザーパスワード入力を求められるので入力する。
 </P>
 
 <P>
@@ -92,21 +96,27 @@ sudo apt install dos2unix python-pip libgfortran3 liblapack-dev
 上記のWSLへのプログラム追加と同様に、WSLコンソールに下記のコマンドを入力して LAMMPS をインストールする。
 </P>
 
-<P>
+<PRE>
 sudo apt install lammps
-</P>
+</PRE>
 
 <P>
 インストール終了後に、下記コマンドを入力して、
 </P>
 
+<PRE>
+which lmp
+</PRE>
 <P>
-which lammps
+<FONT COLOR=red>
+2020年5月24日追記
+</FONT>
+コマンド名がlammps からlmp に変更になった。
 </P>
 
-<P>
-/usr/bin/lammps
-</P>
+<PRE>
+/usr/bin/lmp
+</PRE>
 
 <P>
 と表示されればLAMMPSのインストールが確認できる。
@@ -120,27 +130,70 @@ which lammps
 まず、WSLコンソールで下記のコマンドを入力して、moltemplateをダウンロード・インストールするスクリプトファイルをダウンロードする。
 </P>
 
-<P>
+<PRE>
 wget https://github.com/makoto-yoneya/makoto-yoneya.github.io/raw/master/LAMMPS-organics/install_moltemplate.sh
-</P>
+</PRE>
 
 <P>
 次にダウンロードしたこのスクリプトファイルをWSLコンソールから次の様に入力して実行する。
 </P>
 
-<P>
+<PRE>
 sh install_moltemplate.sh
-</P>
+</PRE>
 
 <P>
 これによって、moltemplateが自動ダウンロード・インストールされる。
 </P>
 
-<B>packmol, atomsk, antechamber, mol22lt.pl</B>
+<P>
+<B>packmol, atomsk</B>
 </P>
 <P>
 次に、初期構造作成支援プログラム<a href="http://m3g.iqm.unicamp.br/packmol/home.shtml"> packmol </A>と、
 LAMMPSファイルフォーマット変換等を行うプログラム<a href="http://atomsk.univ-lille1.fr/"> atomsk </A>、
+をダウンロード・インストールする。
+</P>
+<P>
+これらは上記のapt コマンドではインストール出来ないので、下記手順に従ってインストールする。
+</P>
+<P>
+まず、それぞれのパッケージファイル(*.deb) を下記コマンドでダウンロードする。
+</P>
+<PRE>
+wget http://ftp.jp.debian.org/debian/pool/main/p/packmol/packmol_20.010-1_amd64.deb
+wget https://atomsk.univ-lille.fr/code/atomsk_b0.10.6_amd64.deb
+</PRE>
+<P>
+次に下記コマンドでそれらをインストールする。
+</P>
+<PRE>
+sudo dpkg -i packmol_20.010-1_amd64.deb
+sudo dpkg -i atomsk_b0.10.6_amd64.deb
+</PRE>
+<P>
+上記コマンド実行時に、WSLのインストール時に入力したユーザーパスワード入力を求められるので入力する。
+</P>
+<P>
+インストールはlammpsと同様にwhich コマンドで確認できる。
+</P>
+<PRE>
+which packmol
+which atomsk
+</PRE>
+<P>
+インストールか確認出来たら下記コマンドでパッケージファイルを削除しておく。
+</P>
+
+<PRE>
+rm atomsk_b0.10.6_amd64.deb packmol_20.010-1_amd64.deb
+</PRE>
+
+<P>
+<B>antechamber, mol22lt.pl</B>
+</P>
+
+<P>
 general AMBER 力場を使うための支援プログラム<a href="http://ambermd.org/antechamber/antechamber.html"> antechamber </A>、
 SYBYL-mol2ファイルをmoltemplateの入力分子テンプレートファイルに変換するスクリプトmol22lt.plをダウンロード・インストールする。
 </P>
@@ -186,11 +239,13 @@ VMD は、<a href="http://www.ks.uiuc.edu/Development/Download/download.cgi?Pack
 
 <P>
 以上で、演習環境が整うはずである。<BR>
-LAMMPSをアンインストールしたい場合には、WSLコンソールで下記コマンドを入力する。
+LAMMPS, packmol, atomsk をアンインストールしたい場合には、WSLコンソールで下記コマンドを入力する。
 </P>
 
 <P>
 sudo apt remove lammps
+sudo dpkg -r packmol
+sudo dpkg -r atomsk
 </P>
 
 </BLOCKQUOTE></BLOCKQUOTE>
@@ -317,7 +372,7 @@ packmol は入力座標フォーマットとして上記で作成したMDL-mol�
 具体的には、"WSLコマンドプロンプト"で次のように入力する。
 </P>
 <P>
-antechamber -fi mdl -i bpy.mol -fo pdb -o bpy.pdb
+antechamber -dr no -fi mdl -i bpy.mol -fo pdb -o bpy.pdb
 </P>
 <P>
 次に、packmol のインプットファイルを、例えば下記の内容でメモ帳（アプリメニューのWindowsアクセサリの中に有る）等で作成し、
@@ -394,7 +449,7 @@ moltemplate によるデーターファイルの作成には、まずテンプ�
 具体的には、"WSLコマンドプロンプト"で次のように入力する。
 </P>
 <P>
-antechamber -fi mdl -i bpy.mol -fo mol2 -o bpy.mol2 -at gaff -c gas -rn bpy
+antechamber -dr no -fi mdl -i bpy.mol -fo mol2 -o bpy.mol2 -at gaff -c gas -rn bpy
 </P>
 <P>
 上記実行時に、general AMBER力場(GAFF)中の原子タイプと、"-c gas" で指定した Gastiger 法による原子点電荷が割り振られ、これらの情報は moltemplate で用いられる。
@@ -541,7 +596,7 @@ write_data bpy-128_min.lmp
 実際にエネルギー最小化計算を行う具体的なコマンドラインは次のようになる。
 </P>
 <P>
-lammps < em.txt
+lmp < em.txt
 </P>
 
 <P>
@@ -636,7 +691,7 @@ write_data bpy-128_su.lmp
 </P>
 
 <P>
-lammps < su.txt
+lmp < su.txt
 </P>
 
 <P>
@@ -717,7 +772,7 @@ write_data bpy-128_md.lmp
 </P>
 
 <P>
-lammps < md.txt
+lmp < md.txt
 </P>
 
 <P>
@@ -787,7 +842,7 @@ vmd.exe bpy-128_md.psf bpy-128_md.xtc
 まず、antechamberコマンドを用いて MDL-mol ファイルから Gaussian 計算インプットファイルを下記のコマンドにより作成する。
 </P>
 <P>
-antechamber -fi mdl -i bpy.mol -fo gcrt -o bpy.com
+antechamber -dr no -fi mdl -i bpy.mol -fo gcrt -o bpy.com
 </P>
 <P>
 これを用い、 Gaussian09 プログラム等を用いて例えば、
@@ -799,7 +854,7 @@ g09 bpy.com
 等により非経験分子軌道計算を行い、その log ファイルbpy.logを用いて、 RESP 電荷を次のようにして計算し、それを格納した Sybyl-mol2 ファイルを得る。
 </P>
 <P>
-antechamber -fi gout -i bpy.log -fo mol2 -o bpy.mol2 -at gaff -c resp
+antechamber -dr no -fi gout -i bpy.log -fo mol2 -o bpy.mol2 -at gaff -c resp
 </P>
 <P>
 後はこのmol2ファイルを用いて、上記と同様に mol22lt.pl を用いて moltemplate のテンプレートファイルを作成する。

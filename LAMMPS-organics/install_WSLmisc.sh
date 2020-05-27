@@ -4,29 +4,25 @@ if [ ! -d $HOME/bin ]; then
 	mkdir $HOME/bin
 fi
 
-if [ -x $HOME/bin/packmol ]; then
-	echo "OK! packmol was found"
-else
-	echo "* moving to $HOME/bin dir."
-	cd  $HOME/bin
-	echo "** installing packmol"
-	wget --no-check-certificate -q http://staff.aist.go.jp/makoto-yoneya/MDonWINPC/bin/packmol
-	chmod ugo+x packmol
-fi
-
-if [ -x $HOME/bin/atomsk ]; then
-	echo "OK! atomsk was found"
-else
-	echo "* moving to $HOME/bin dir."
-	cd  $HOME/bin
-	echo "** installing atomsk"
+#if [ -x $HOME/bin/packmol ]; then
+#	echo "OK! packmol was found"
+#else
+#	echo "* moving to $HOME/bin dir."
+#	cd  $HOME/bin
+#	echo "** installing packmol"
+#	wget --no-check-certificate -q http://staff.aist.go.jp/makoto-yoneya/MDonWINPC/bin/packmol
+#	chmod ugo+x packmol
+#fi
+#
+#if [ -x $HOME/bin/atomsk ]; then
+#	echo "OK! atomsk was found"
+#else
+#	echo "* moving to $HOME/bin dir."
+#	cd  $HOME/bin
+#	echo "** installing atomsk"
 #	wget --no-check-certificate -q http://staff.aist.go.jp/makoto-yoneya/MDonWINPC/bin/atomsk
-	wget https://atomsk.univ-lille.fr/code/atomsk_b0.10.6_Linux-amd64.tar.gz
-	tar zxvf atomsk_b0.10.6_Linux-amd64.tar.gz
-	ln atomsk_b0.10.6_Linux-amd64/atomsk .
-	chmod ugo+x atomsk
-	rm -rf atomsk_b0.10.6_Linux-amd64.tar.gz
-fi
+#	chmod ugo+x atomsk
+#fi
 
 if [ -x $HOME/bin/mol22lt.pl ]; then
 	echo "OK! mol22lt.pl was found"
