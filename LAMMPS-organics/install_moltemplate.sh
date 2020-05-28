@@ -5,8 +5,7 @@ then
 	mkdir $HOME/opt
 fi
 
-if [ -x $HOME/opt/moltemplate ];
-then
+if [ -x $HOME/opt/moltemplate ]; then
 	echo "OK! moltemplate was found"
 else
 	echo "* moving to $HOME/opt dir."
@@ -14,5 +13,11 @@ else
 	echo "** installing moltemplate"
 	git clone https://github.com/jewettaij/moltemplate moltemplate
 	cd moltemplate
-	pip install . --user
+	if [ -x /usr/bin/pip ]; then
+		pip install . --user
+	elif [ -x /usr/bin/pip3 ]; then
+		pip3 install . --user
+	else
+		echo "pip and pip3 not found"
+	fi
 fi

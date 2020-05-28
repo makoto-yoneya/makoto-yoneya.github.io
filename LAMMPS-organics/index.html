@@ -67,11 +67,11 @@ WSLのインストール法についてはネット上に多くの情報があ�
 </P>
 <P>
 <FONT COLOR=red>
-2020年5月24日追記
+2020年5月24日更新
 </FONT>
-下記の手順はubuntu 20.04LTS で検証しました。
+下記使用ソフトインストールはWSLで<FONT COLOR=red>ubuntu 20.04LTS</FONT> が前提。
 <BR>
-ubuntu 18.04LTS では下記の手順でatomsk, packmol がインストール出来ません。
+ubuntu 18.04LTS ではライブラリ依存関係で下記の手順でatomsk, packmol がインストール出来ず不可。
 </P>
 <P>
 WSLインストール後に、WSLを起動して後に必要となるプログラムを追加しておく。<BR>
@@ -79,6 +79,7 @@ WSLインストール後に、WSLを起動して後に必要となるプログ�
 下記コマンドを入力する。
 </P>
 <PRE>
+sudo apt update
 <!--
 sudo apt install dos2unix python-pip libgfortran3 liblapack-dev
 -->
@@ -111,7 +112,7 @@ which lmp
 <FONT COLOR=red>
 2020年5月24日追記
 </FONT>
-コマンド名がlammps からlmp に変更になった。
+コマンド名がlammps から<FONT COLOR=red> lmp </FONT> に変更になった。
 </P>
 
 <PRE>
@@ -126,7 +127,8 @@ which lmp
 </P>
 <P>
 次に、LAMMPS の支援プログラム<a href="https://www.moltemplate.org/"> moltemplate </A>をダウンロード・インストールする。
-<BR>
+</P>
+<P>
 まず、WSLコンソールで下記のコマンドを入力して、moltemplateをダウンロード・インストールするスクリプトファイルをダウンロードする。
 </P>
 
@@ -155,24 +157,23 @@ LAMMPSファイルフォーマット変換等を行うプログラム<a href="ht
 をダウンロード・インストールする。
 </P>
 <P>
-これらは上記のapt コマンドではインストール出来ないので、下記手順に従ってインストールする。
+まず、WSLコンソールで下記のコマンドを入力して、moltemplateをダウンロード・インストールするスクリプトファイルをダウンロードする。
 </P>
-<P>
-まず、それぞれのパッケージファイル(*.deb) を下記コマンドでダウンロードする。
-</P>
+
 <PRE>
-wget http://ftp.jp.debian.org/debian/pool/main/p/packmol/packmol_20.010-1_amd64.deb
-wget https://atomsk.univ-lille.fr/code/atomsk_b0.10.6_amd64.deb
+wget https://github.com/makoto-yoneya/makoto-yoneya.github.io/raw/master/LAMMPS-organics/install_packmol-atomsk.sh
 </PRE>
+
 <P>
-次に下記コマンドでそれらをインストールする。
+次にダウンロードしたこのスクリプトファイルをWSLコンソールから次の様に入力して実行する。
 </P>
+
 <PRE>
-sudo dpkg -i packmol_20.010-1_amd64.deb
-sudo dpkg -i atomsk_b0.10.6_amd64.deb
+sh install_packmol-atomsk.sh
 </PRE>
+
 <P>
-上記コマンド実行時に、WSLのインストール時に入力したユーザーパスワード入力を求められるので入力する。
+上記コマンド実行時に、WSLのインストール時に入力したユーザーパスワード入力を求められる場合は入力する。
 </P>
 <P>
 インストールはlammpsと同様にwhich コマンドで確認できる。
@@ -180,13 +181,6 @@ sudo dpkg -i atomsk_b0.10.6_amd64.deb
 <PRE>
 which packmol
 which atomsk
-</PRE>
-<P>
-インストールか確認出来たら下記コマンドでパッケージファイルを削除しておく。
-</P>
-
-<PRE>
-rm atomsk_b0.10.6_amd64.deb packmol_20.010-1_amd64.deb
 </PRE>
 
 <P>
@@ -205,15 +199,15 @@ antechamber を AmberTools20 ベースの物に変更。
 <P>
 上記と同様に、WSLコンソールで下記のコマンドを入力して上記をインストールするスクリプトファイルをダウンロードする。
 </P>
-<P>
+<PRE>
 wget https://github.com/makoto-yoneya/makoto-yoneya.github.io/raw/master/LAMMPS-organics/install_WSLmisc.sh
-</P>
+</PRE>
 <P>
 次にダウンロードしたこのスクリプトファイルをWSLコンソールから次の様に入力して実行する。
 </P>
-<P>
+<PRE>
 sh install_WSLmisc.sh
-</P>
+</PRE>
 <P>
 以上でWSLコンソールでのインストール作業は終了なので、WSLコンソールで、"exit"と入力してWSLを終了させる。
 </P>
