@@ -162,7 +162,7 @@ GROMACSを 2018.7 から、2019.6 に更新しました。</FONT><BR>
 <P>
 以上で、演習環境が整うはずである。
 
-上記の ChemSketch, OpenBabel, VMD, Gow を除くすべてのソフトウエアは、C:¥optフォルダ以下にインストールされており（トータル約30MB）、これらすべてをアンインストールするには、このoptフォルダを削除すればよい。<BR>
+上記の ChemSketch, OpenBabel, VMD, Gow を除くすべてのソフトウエアは、C:\optフォルダ以下にインストールされており（トータル約30MB）、これらすべてをアンインストールするには、このoptフォルダを削除すればよい。<BR>
 <!--
 <FONT COLOR=RED>更新情報<BR>
 インストールフォルダを C:\Gow\local から、C:\opt に変更しました。</FONT><BR>
@@ -230,7 +230,7 @@ Fig. 2 4,4'-bpy after 3D optimization
 ここで、次に左下のリストの copy to ChemSketch を選択し、3D Viewer でoptimizeした分子構造を ChemSketch に上書きする。<BR>
 次に、ChemSketchのFile メニューから export で、ファイルの種類として MDL molfiles [<FONT COLOR=RED>V2000</FONT>] を選択し、適当なファイル名 (bpy-aa.mol等) をつけて下記のフォルダに保存する。
 <P>
-C:\Users¥ユーザー名（あるいは C:\ユーザー¥ユーザー名）
+C:\Users\ユーザー名（あるいは C:\ユーザー\ユーザー名）
 </P>
 
 <P>
@@ -252,7 +252,7 @@ MD 計算に必要なトポロジーファイルを作成する方法の一つ�
 <p>
 まず、
 <P>
-C:\Users¥ユーザー名（あるいは C:\ユーザー¥ユーザー名）
+C:\Users\ユーザー名（あるいは C:\ユーザー\ユーザー名）
 </P>
 <P>
 <FONT color=red>フォルダ中のバッチファイル、<B>GMXRC</B>(あるいは<B>GMXRC.bat)</B>をダブルクリックし、GROMACS等のコマンドパスの設定された、Windowsのコマンドプロンプト（黒いDOS窓）を起動する。<BR>
@@ -262,7 +262,7 @@ C:\Users¥ユーザー名（あるいは C:\ユーザー¥ユーザー名）
 上記のコマンドプロンプトを開いた直後は、通常は<BP>
 
 <P>
-C:\Users¥ユーザー名
+C:\Users\ユーザー名
 </P>
 
 <P>
@@ -317,7 +317,7 @@ topolbuild実行時の"-ff gaff"は、使用する力場としてgeneral AMBER�
 上記により、フォルダ
 </P>
 <P>
-C:\Users¥ユーザー名
+C:\Users\ユーザー名
 </P>
 にMD計算に必要な各種ファイルが出来ているはずである。 
 </P>
@@ -421,7 +421,7 @@ ExtensionsメニューからTK Consoleを選択すると表示されるウイン
 -->
 pbc box<BR>
 と入力するか、あるいは、VMDのインストールフォルダにあるvmd.rcというファイルの最後に<BR>
-user add key b {pbc box -color green}<BR>
+user add key b {pbc box -color green -width 1}<BR>
 を追加・保存し、分子表示画面がアクティブな状態でキーボードのｂを押すと表示できる。<BR>
 終了は file メニューから exit を選択する。
 </P>
