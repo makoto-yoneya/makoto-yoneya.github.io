@@ -5,7 +5,7 @@
 
 <HEAD>
 	<TITLE>
-		GROMACSと連携ソフトウエアによる分子動力学計算 updated
+		GROMACSと連携ソフトウエアによる分子動力学計算
 	</TITLE>
 <script type="text/javascript">
 
@@ -28,16 +28,6 @@
 	<H2 ALIGN="center"><FONT COLOR="crimson">
 		「GROMACSと連携ソフトウエアによる分子動力学計算」</H2>
 	</FONT>
-
-<!--
-	<P ALIGN="center">
-	「高分子」平成 27年 3月号<a href="http://staff.aist.go.jp/makoto-yoneya/pdf/Polymers_2015_3_p150_152.pdf">記事</a>をupdateした
-
-	第20回高分子計算機科学研究会　平成 27年 6月
-
-<a href="http://staff.aist.go.jp/makoto-yoneya/pdf/CompPolymerSci-2015Jun26.pdf">資料</a>に基ずく
-	</P>
--->
 
 <HR WIDTH=60% ALIGN="center">
 </P>
@@ -86,7 +76,7 @@ ChemSketch Freeware は、Advanced Chemistry Development, Inc の<a href="http:/
 オリジナルのBabelから重用されてきたきわめて多種の化学関連ファイル形式変換が可能なフリーソフト。
 Gasteiger、charge equilibration（QEq）法等の簡易手法による点電荷計算機能なども有する。
 MD計算のための点電荷計算には、GaussianなどのMO計算プログラムの結果から、electro staticpotential （ESP）電荷として得られたものを使うのが主流となっているが、以下ではOpenBabelによるGasteiger電荷を用いる。<BR>
-OpenBabelは、Windows版 OpenBabel-2.4.1 が<a href="http://openbabel.org/">ホームページ</a>からダウンロード可能である。<BR>
+OpenBabelは、Windows版 OpenBabel-2.4.1 (2023.02時点の最新版は ver. 3.1.1だが、babelコマンドがオプション等が異なるobabelに代わっているため、旧バージョンを使用)が<a href="https://sourceforge.net/projects/openbabel/files/openbabel/2.4.1/">ここ</a>からダウンロード可能である。<BR>
 ダウンロードしたインストーラーファイルをダブルクリックして、後は表示に従えば、一般のwindowsアプリケーションと同様にインストールできる。
 </P>
 
@@ -94,38 +84,22 @@ OpenBabelは、Windows版 OpenBabel-2.4.1 が<a href="http://openbabel.org/">ホ
 </P>
 <P>
 MD計算のスナップショットや、アニメーションの表示に用いる分子表示ソフト。<BR>
-「高分子」2015年3月号記事で紹介したgOpenMolは、その後HPが閉じられた様であることもあり、以下ではVMDを使う。<BR>
 VMD は、<a href="http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD">ホームページ</a>から Windows 版をダウンロード可能である。<BR>
 ダウンロードしたインストーラーファイルをダブルクリックして、後は表示に従えば、一般のwindowsアプリケーションと同様にインストールできる。
 </P>
 
+<!--
 <P>
 <B>Gow (GNU on Windows)</B>
 </P>
 <P>
 WindowsPC のコマンドプロンプトで、基本的なUNIX/LINUXのコマンドを利用可能とするフリーソフトウエアの一つ。<BR>
 下記でのGROMACS等の自動ダウンロードと展開に使う wget、unzipコマンド等で必要なもので、GROMACS本体等の実行には必要ない。<BR>
-<a href="https://github.com/bmatzelle/gow/releases">ここ</A>からインストーラー(Gow-0.5.0.exe これより新しいバージョンは仕様が異なり、上記wget, unzip両者が揃わないのでので不可)をダウンロードし、クリックして実行することによりインストールする
-<!--
-パネルを順次を進めて行き、"Choose Install Location" のパネルで、"Destination Folder"のディフォールトが、
-<P>
-C:\Program Files\Gow
+<a href="https://github.com/bmatzelle/gow/releases">ここ</A>からインストーラー(Gow-0.5.0.exe これより新しいバージョンは仕様が異なり、上記wget, unzip両者が揃わないのでので不可)をダウンロードし、クリックして実行することによりインストールする（詳細は、ネット上にある<a href="http://news.mynavi.jp/articles/2011/12/12/gow/001.html">説明</a>等を参照）。
 </P>
-となっているが、後に空白の入った設定が問題となるので、<BR>
-<FONT COLOR=RED>必ず、
-<P>
-C:\Gow
-</P>
-<P>
-</FONT>に変更してインストールする
 -->
-（詳細は、ネット上にある<a href="http://news.mynavi.jp/articles/2011/12/12/gow/001.html">説明</a>等を参照）。
-<BR>
-<!--
-<FONT COLOR=RED>更新情報<BR>
-以前必要だった、Gowインストール先の C:\Gow への変更は不要になりました。</FONT><BR>
--->
-</P>
+<FONT COLOR=RED>更新情報(2023.02)<BR>
+以前必要だった、Gowインストールは不要になりました。</FONT><BR>
 
 <P>
 <B>GROMACS, topolBuild</B>
@@ -139,7 +113,7 @@ C:\Gow
 </P>
 
 <P>
-wget https://github.com/makoto-yoneya/makoto-yoneya.github.io/raw/master/MDforPRIMERS/install_dos.bat &lt;Enter&gt;&nbsp;
+curl -OL https://github.com/makoto-yoneya/makoto-yoneya.github.io/raw/master/MDforPRIMERS/install_dos.bat &lt;Enter&gt;&nbsp;
 </P>
 
 <P>
@@ -151,22 +125,15 @@ install_dos.bat &lt;Enter&gt;&nbsp;
 </P>
 
 <P>
-これによって、 GROMACS, topolBuildが自動ダウンロード・インストールされる。<BR>
+これによって、 GROMACS (ver.2019.6), topolBuildが自動ダウンロード・インストールされる。<BR>
 上記のバッチファイル (install_dos.bat) は、インストール状況をチエックし、何らか理由でインストールに失敗したモジュールがあればそれのみ再試行する。
 二回目以降の実行で、すべてＯＫと表示されればインストール完了を確認できる。<BR>
-
-<FONT COLOR=RED>更新情報<BR>
-GROMACSを 2018.7 から、2019.6 に更新しました。</FONT><BR>
 </P>
 
 <P>
 以上で、演習環境が整うはずである。
 
-上記の ChemSketch, OpenBabel, VMD, Gow を除くすべてのソフトウエアは、C:\optフォルダ以下にインストールされており（トータル約30MB）、これらすべてをアンインストールするには、このoptフォルダを削除すればよい。<BR>
-<!--
-<FONT COLOR=RED>更新情報<BR>
-インストールフォルダを C:\Gow\local から、C:\opt に変更しました。</FONT><BR>
--->
+上記の ChemSketch, OpenBabel, VMD を除くすべてのソフトウエアは、C:\optフォルダ以下にインストールされており（トータル約30MB）、これらすべてをアンインストールするには、このoptフォルダを削除すればよい。<BR>
 </P>
 
 </BLOCKQUOTE></BLOCKQUOTE>
@@ -766,8 +733,9 @@ SPC水以外の溶媒の場合は、上記 gaff_spcw.itp の代わりに当該�
 </P>
 
 <P ALIGN="center">
-	2019年08月25日更新<BR>
-	<I><A HREF="mailto:makoto-yoneya@aist.go.jp">makoto-yoneya@aist.go.jp</A> </I>
+	2023年02月21日更新<BR>
+	<I><A HREF="mailto:makoto-yoneya@frontier.hokudai.ac.jp">
+makoto-yoneya@frontier.hokudai.ac.jp</A> </I>
 </P>
 
 </BODY>
