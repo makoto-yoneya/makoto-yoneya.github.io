@@ -113,7 +113,7 @@ WindowsPC のコマンドプロンプトで、基本的なUNIX/LINUXのコマン
 </P>
 
 <P>
-curl -OL https://github.com/makoto-yoneya/makoto-yoneya.github.io/raw/master/MDforPRIMERS/install_dos.bat &lt;Enter&gt;&nbsp;
+curl -OL https://github.com/makoto-yoneya/makoto-yoneya.github.io/raw/master/MDforPRIMERS/install_dos.bat &lt;Enter&gt;&nbsp;(Enterキー入力を表す。以下省略)
 </P>
 
 <P>
@@ -121,7 +121,7 @@ curl -OL https://github.com/makoto-yoneya/makoto-yoneya.github.io/raw/master/MDf
 </P>
 
 <P>
-install_dos.bat &lt;Enter&gt;&nbsp;
+install_dos.bat
 </P>
 
 <P>
@@ -243,7 +243,7 @@ topolBuild は入力分子ファイルフォーマットとして、sybyl-mol2�
 具体的には、"コマンドプロンプト"で次のように入力する。
 </P>
 <P>
-babel -imol bpy-aa.mol -omol2 bpy-aa.mol2 --title bpy-aa &lt;Enter&gt;&nbsp;(Enterキー入力を表す)
+babel -imol bpy-aa.mol -omol2 bpy-aa.mol2 --title bpy-aa
 </P>
 <P>
 上記で、"--title" のハイフォンのみ２個である点に注意されたい。
@@ -257,7 +257,7 @@ babel -imol bpy-aa.mol -omol2 bpy-aa.mol2 --title bpy-aa &lt;Enter&gt;&nbsp;(Ent
 <!--
 topolbuild -n bpy-aa -dir C:\Gow\local\topolbuild -ff gaff -purge 0 &lt;Enter&gt;&nbsp
 -->
-topolbuild -n bpy-aa -dir C:\opt\topolbuild -ff gaff -purge 0 &lt;Enter&gt;&nbsp
+topolbuild -n bpy-aa -dir C:\opt\topolbuild -ff gaff -purge 0
 <BR><BR>
 
 <!--
@@ -435,7 +435,10 @@ copy bpy-aa.top bpy-aa.txt
 </P>
 
 <P>
-上記、bpy-aa.txt をダブルクリックして普通のテキストファイルとして開き、最後の行のtopolbuildによるこのファイルの自動生成時のディフォールト値の 1 分子を、実際に計算する系中の分子数に合わせて変更して保存する。
+上記、bpy-aa.txt をダブルクリックして普通のテキストファイルとして開き、
+<font color=red>
+最後の行のtopolbuildによるこのファイルの自動生成時のディフォールト値の 1 分子を、実際に計算する系中の分子数（上記の例では128）に合わせて変更して保存する。
+</font>
 </P>
 
 <p>
@@ -570,7 +573,13 @@ ref_t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb
 </td></tr></table>
 
 <p>
-上記を、su.mdp と同様にして、”メモ帳”等のエディタで、ファイル名 grompp.mdp として作成する。
+上記を、su.mdp と同様にして、”メモ帳”等のエディタで、ファイル名 grompp.txt として作成し、上記 su.txt と同様に
+<P>
+ren grompp.txt grompp.mdp
+</P>
+でファイル名を grompp.mdp に変更する。
+</P>
+<P>
 この例では、温度は 300.0K に設定され、時間刻み 0.0005ps(0.5fs) で2000 ステップ（トータル 1ps）計算しているが、全体の計算の長さは計算の目的により数百 ps から百 ns 程度まで様々である。
 この長さの計算は通常長時間かかるため、いくつかのジョブに分けて途中経過を見ながら実行する。
 ディフォールトのファイル名grompp.mdpとして作成しておくと、後述の様にgromppで計算パラメータファイルの指定 (-f grompp.mdp) を省略できる。
