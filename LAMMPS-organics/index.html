@@ -62,21 +62,28 @@
 <P>
 Windows 10 64bit でubuntu等のLINUXを利用可能とするMicrosof提供の環境。<BR>
 下記でLAMMPS等の実行の環境として使用する。<BR>
-WSLのインストール法についてはネット上に多くの情報があるので、
-例えば<a href="https://qiita.com/Aruneko/items/c79810b0b015bebf30bb">ここ</A>等を参照してインストールする。
-</P>
-<P>
 <FONT COLOR=red>
-2020年5月24日更新
+現在WSLの主流はWSL2であるが、下記ではWindowsファイル操作が中心となるためWSL1を用いる（2023.02更新）。
 </FONT>
-下記使用ソフトインストールはWSLで<FONT COLOR=red>ubuntu 20.04LTS</FONT> が前提。
 <BR>
-ubuntu 18.04LTS ではライブラリ依存関係で下記の手順でatomsk, packmol がインストール出来ず不可。
-</P>
+WSL1のインストール法についてはネット上に多くの情報があるので、
+例えば<a href="https://qiita.com/tkj06/items/b5c195db860241663485">ここ</A>等を参照してインストールする。
+<BR>
+下記使用ソフトインストールはWSL1で<FONT COLOR=red>ubuntu 20.04LTS</FONT> 使用が前提（
+ubuntu 18.04LTS ではライブラリ依存関係で下記の手順でatomsk, packmol がインストール出来ず不可）。<BR>
+<FONT COLOR=red>
+2023.02時点では ubuntu 22.04LTSも Microsoft Store で入手可能であるが、下記動作未確認（2023.02更新）
+</FONT>
+<BR>
+
 <P>
 WSLインストール後に、WSLを起動して後に必要となるプログラムを追加しておく。<BR>
 まず、左下隅のWindowsアイコン - アプリリストから ubuntu *** を選択して WSL のコンソールを起動し、
-下記コマンドを入力する。
+下記コマンドを入力する。<BR>
+下記コマンド実行時に、WSLのインストール時に入力したユーザーパスワード入力を求められるので入力する。<BR>
+下記コマンドラインをCTRL-Cでコピーし、
+WSLコンソールのトップバー上で右クリックして現れるメニューから「編集」のサブメニューの「貼り付け」を選ぶと
+上記でコピーしたコマンドラインがWSLコンソール・プロンプトに貼り付け可能。
 </P>
 <PRE>
 sudo apt update
@@ -85,9 +92,6 @@ sudo apt install dos2unix python-pip libgfortran3 liblapack-dev
 -->
 sudo apt install dos2unix python3-pip libgfortran4 libgfortran5 liblapack3
 </PRE>
-<P>
-上記コマンド実行時に、WSLのインストール時に入力したユーザーパスワード入力を求められるので入力する。
-</P>
 
 <P>
 <B>LAMMPS</B>
@@ -109,11 +113,13 @@ sudo apt install lammps
 which lmp
 </PRE>
 <P>
+<!--
 <FONT COLOR=red>
 2020年5月24日追記
 </FONT>
 コマンド名がlammps から<FONT COLOR=red> lmp </FONT> に変更になった。
 </P>
+-->
 
 <PRE>
 /usr/bin/lmp
@@ -152,7 +158,7 @@ sh install_moltemplate.sh
 <B>packmol, atomsk</B>
 </P>
 <P>
-次に、初期構造作成支援プログラム<a href="http://m3g.iqm.unicamp.br/packmol/home.shtml"> packmol </A>と、
+次に、初期構造作成支援プログラム<a href="https://m3g.github.io/packmol/"> packmol </A>と、
 LAMMPSファイルフォーマット変換等を行うプログラム<a href="http://atomsk.univ-lille1.fr/"> atomsk </A>、
 をダウンロード・インストールする。
 </P>
@@ -189,13 +195,18 @@ which atomsk
 
 <P>
 general AMBER 力場を使うための支援プログラム<a href="http://ambermd.org/antechamber/antechamber.html"> antechamber </A>、
-SYBYL-mol2ファイルをmoltemplateの入力分子テンプレートファイルに変換するスクリプトmol22lt.plをダウンロード・インストールする。
+SYBYL-mol2ファイルをmoltemplateの入力分子テンプレートファイルに変換するスクリプトmol22lt.plをダウンロード・インストールする。<BR>
+<FONT COLOR=red>
+2023.02時点のmoltemplateにはmol22lt.pyが同包されるようになっているが、このmol22lt.pyを使うと下記手順でエラーが発生するため下記では使用しない。
+</FONT>
 </P>
 
+<!--
 <P>
 <FONT COLOR=RED>更新情報</FONT><BR>
 antechamber を AmberTools20 ベースの物に変更。
 </P>
+-->
 <P>
 上記と同様に、WSLコンソールで下記のコマンドを入力して上記をインストールするスクリプトファイルをダウンロードする。
 </P>
@@ -303,11 +314,11 @@ Fig. 2 4,4'-bpy after 3D optimization
 ここで、次に左下のリストの copy to ChemSketch を選択し、3D Viewer でoptimizeした分子構造を ChemSketch に上書きする。<BR>
 次に、ChemSketchのFile メニューから export で、ファイルの種類として MDL molfiles [<FONT COLOR=RED>V2000</FONT>] を選択し、適当なファイル名 (bpy.mol等) をつけて、自分の Windows ユーザー名が漢字でなく英数字の場合は下記のフォルダに保存する。
 <P>
-C:\Users¥ユーザー名（あるいは C:\ユーザー¥ユーザー名）
+C:\Users\ユーザー名（あるいは C:\ユーザー\ユーザー名）
 </P>
 自分のユーザー名が漢字の場合は、後での作業のため上記の代わりに、
 <P>
-C:\Users¥Public（あるいは C:\ユーザー¥パブリック）
+C:\Users\Public（あるいは C:\ユーザー\パブリック）
 </P>
 に保存する。
 <BR>
@@ -328,7 +339,7 @@ ChemOffice の場合は、ChemSchetchの代わりにChemDrawで分子構造を�
      <li class="enumerate" value="2">X 線回折による結晶構造データーを用いる</li>
      <li class="enumerate" value="3">人為的な結晶構造を作成して用いる</li>
 </ol>
-最初のランダム配置した初期構造は、<a href="http://m3g.iqm.unicamp.br/packmol/home.shtml"> packmol </a>プログラムによって作成可能である。
+最初のランダム配置した初期構造は、<a href="https://m3g.github.io/packmol/"> packmol </a>プログラムによって作成可能である。
 </P>
 
 <P>
@@ -485,7 +496,7 @@ moltemplate.sh -atomstyle full -pdb bpy-128.pdb system.txt
 上記により、フォルダ
 </P>
 <P>
-C:\Users¥ユーザー名（あるいはPublic）
+C:\Users\ユーザー名（あるいはPublic）
 </P>
 <P>
 にMD計算に必要な各種ファイルが出来ているはずである。 
@@ -513,7 +524,8 @@ C:\Users¥ユーザー名（あるいはPublic）
 したがって、このような非現実的な近接を取り除く目的で、まずエネルギー最小化を行うのが一般的である。
 </P>
 
-<p>
+<!--
+<P>
 まず、LAMMPSでエネルギー最小化計算を実行するスクリプトファイルを、
 上記のmoltemplate生成のひな型（system.in)を下記コマンド入力でメモ帳で読める(改行)形式に変換・コピーして作成する。
 </P>
@@ -521,7 +533,13 @@ C:\Users¥ユーザー名（あるいはPublic）
 unix2dos -n system.in em.txt
 </P>
 <P>
-次に、このem.txtをメモ帳等で開き、例えば下記の様に追記、改変する。<BR>
+次に、このem.txtをメモ帳等で開き、例えば下記の様に追記、改変する。
+</P>
+-->
+
+<P>
+まず、LAMMPSでエネルギー最小化計算を実行するスクリプトファイルを、
+下記内容でメモ帳等でファイル名 em.txt として作成する。<BR>
 WSLコンソールからのメモ帳の起動は、
 </P>
 <P>
@@ -530,6 +548,7 @@ notepad.exe em.txt
 <P>
 で可能である。
 </P>
+
 <PRE>
 # ----------------- Init Section -----------------
 
@@ -581,9 +600,11 @@ thermo          10
 write_data bpy-128_min.lmp
 </font>
 </PRE>
+<!--
 <P>
 <font color=red>赤字部分が追記・改変部分である。</font>
 </P>
+-->
 
 <P>
 以上で、エネルギー最小化計算の準備が出来た。
@@ -612,8 +633,14 @@ vmd.exe bpy-128_min.pdb
 上記のようにしてエネルギー最小化された構造を得たので、いよいよ MD 計算を行う。
 エネルギー最小化された構造には原子の速度の情報が無いので、適当な温度を設定し、それに対応したボルツマン分布での原子速度生成を設定（下記スクリプト中のvelocity行) し、スタートアップ MD をまず行う。 <BR>
 
-<p>
+<!--
+<P>
 エネルギー最小化計算の時と同様に、まず、moltemplate生成のひな型（system.in)をunix2dosコマンドでメモ帳で読める形式に変換・コピーして su.txt 等の名前で作成し、このsu.txtをメモ帳等で開き、例えば下記の様に追記、改変する。
+</P>
+-->
+<P>
+エネルギー最小化計算の時と同様に、まず、
+下記内容でメモ帳等でファイル名 su.txt 等の名前で作成する。
 </P>
 <PRE>
 # ----------------- Init Section -----------------
@@ -674,9 +701,11 @@ velocity        all create 300 4928459 dist gaussian
 write_data bpy-128_su.lmp
 </font>
 </PRE>
-<P>
+<!--
 <font color=red>赤字部分が追記・改変部分である。</font>
 <BR>
+-->
+<P>
 上記の例では、初期温度は 300K に設定され、時間刻み 1 fs で 5000 ステップ (トータル 5 ps) 計算している。
 </P>
 
@@ -695,10 +724,16 @@ lmp < su.txt
 <h5 class="subsubsectionHead">2.3 継続 MD 計算</h5>
 
 <p>
-<p>
 上記のスタートアップMD計算以降は、write_data コマンドで書き出した LAMMPSデータファイル（上記の例では、bpy-128_su.lmp）中の原子の速度を用い、velocity コマンドを省く事が可能である。<BR>
-<p>
+</P>
+<!--
+<P>
 上記と同様に、スクリプトファイルを md.txt 等の名前で作成し、このmd.txtをメモ帳等で開き、例えば下記の様に追記、改変する。
+</P>
+-->
+<P>
+上記と同様に、まず、
+下記内容でメモ帳等でファイル名 md.txt 等の名前で作成する。
 </P>
 <PRE>
 # ----------------- Init Section -----------------
@@ -777,9 +812,6 @@ lmp < md.txt
 <P>
 トラジェクトリファイル bpy-128_md.xtc をアニメーションとして見るには、まず下記の手順で、VMD でLAMMPSデータから psf ファイルを作成する必要がある。
 </p>
-<FONT color=red>
-下記一部変更しました。
-</FONT>
 <!--
 <p>
 ます、VMDを左下隅のウインドウズアイコンからアプリメニューを表示させ、その中の University of Illinoisの下の VMD1.9.2 をクリックすることで起動する。<BR>
@@ -863,8 +895,8 @@ antechamber -fi gout -i bpy.log -fo mol2 -o bpy.mol2 -at gaff -c resp -dr no
 </P>
 
 <P ALIGN="center">
-	2020年05月21日更新<BR>
-	<I><A HREF="mailto:makoto-yoneya@aist.go.jp">makoto-yoneya@aist.go.jp</A> </I>
+	2023年02月23日更新<BR>
+	<I><A HREF="mailto:makoto-yoneya@frontier.hokudai.ac.jp">makoto-yoneya@frontier.hokudai.ac.jp</A> </I>
 </P>
 
 </BODY>

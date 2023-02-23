@@ -50,25 +50,29 @@ else
 	rm -rf antechamber-at20.tar.gz
 fi
 
-grep MDonWSL $HOME/.bashrc > /dev/null
+if [ ! -e  $HOME/.bash_aliases ]; then
+	echo "# created by install_ac.sh" > .bash_aliases
+fi	
+
+grep MDonWSL $HOME/.bash_aliases > /dev/null
 if [ $? -eq 1 ]; then
-	echo "* updating .bashrc"
-	echo "# MDonWSL" >> .bashrc
-	echo "set -o notify" >> .bashrc
+	echo "* updating .bash_aliases"
+	echo "# MDonWSL" >> .bash_aliases
+	echo "set -o notify" >> .bash_aliases
 	if [ -d $HOME/bin ]; then
-		echo "export PATH=\$HOME/bin:\$PATH" >> .bashrc
+		echo "export PATH=\$HOME/bin:\$PATH" >> .bash_aliases
 	fi
 	if [ -x $HOME/opt/amber20 ]; then
-		echo "export AMBERHOME=\$HOME/opt/amber20" >> .bashrc
-		echo "export PATH=\$AMBERHOME/bin:\$PATH" >> .bashrc
+		echo "export AMBERHOME=\$HOME/opt/amber20" >> .bash_aliases
+		echo "export PATH=\$AMBERHOME/bin:\$PATH" >> .bash_aliases
 	fi
 	if [ -x $HOME/opt/moltemplate ]; then
-		echo "export MTHOME=\$HOME/opt/moltemplate/moltemplate" >> .bashrc
-		echo "export PATH=\$MTHOME/scripts:\$PATH" >> .bashrc
+		echo "export MTHOME=\$HOME/opt/moltemplate/moltemplate" >> .bash_aliases
+		echo "export PATH=\$MTHOME/scripts:\$PATH" >> .bash_aliases
 	fi
-	VMDDIR="/mnt/c/Program Files (x86)/University of Illinois/VMD"
+	VMDDIR="/mnt/c/Program Files/VMD"
 	if [ -x "$VMDDIR" ]; then
-		echo "export VMDDIR=\"/mnt/c/Program Files (x86)/University of Illinois/VMD\"" >> .bashrc
-		echo "export PATH=\$VMDDIR:\$PATH" >> .bashrc
+		echo "export VMDDIR=\"/mnt/c/Program Files/VMD\"" >> .bash_aliases
+		echo "export PATH=\$VMDDIR:\$PATH" >> .bash_aliases
 	fi
 fi
