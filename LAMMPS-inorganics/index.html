@@ -64,15 +64,15 @@
 </P>
 <P>
 分子動力学シミュレーションソフトLAMMPSは、<a href="https://rpm.lammps.org/windows/">ここ</a>から Windows 版をダウンロード可能である。<BR>
-ダウンロードしたインストーラーファイル LAMMPS-32bit-stable.exe (64bitOSの場合は LAMMPS-64bit-stable.exe）をダブルクリックして、後は表示に従えば、一般のwindowsアプリケーションと同様にインストールできる。
+ダウンロードしたインストーラーファイル LAMMPS-64bit-stable.exe (32bitOSの場合は LAMMPS-32bit-stable.exe）をダブルクリックして、後は表示に従えば、一般のwindowsアプリケーションと同様にインストールできる。
 </P>
 
 <P>
 <B>Atomsk</B>
 </P>
 <P>
-分子シミュレーションの支援ソフト<a href="http://atomsk.univ-lille1.fr/"> atomsk </A>の Windows 版を<a href="http://atomsk.univ-lille1.fr/dl.php">ここ</a>からダウンロードする。<BR>
-ダウンロードした zip ファイル atomsk_b0.10.6_Windows.zip を展開し、展開フォルダ中のインストーラー Atomsk_setup.exe をダブルクリックして、後は表示に従えば、一般のwindowsアプリケーションと同様にインストールできる。
+分子シミュレーションの支援ソフト atomsk の Windows 版は<a href="http://atomsk.univ-lille1.fr/">ホームページ</a>からダウンロード可能である。<BR>
+ダウンロードした zip ファイル atomsk_b0.*.*_Windows.zip を展開し、展開フォルダ中のインストーラー Atomsk_setup.exe をダブルクリックして、後は表示に従えば、一般のwindowsアプリケーションと同様にインストールできる。
 </P>
 
 <B>VMD (Visual Molecular Dynamics)</B>
@@ -84,31 +84,31 @@ VMD は、<a href="http://www.ks.uiuc.edu/Development/Download/download.cgi?Pack
 </P>
 
 <P>
-以上の三つプログラムを使用するコマンドパス等をセットするためのバッチファイル LMPRC.bat を下記の内容、
+VMDをコマンドラインから使用するためのコマンドパスをセットするためのバッチファイル LMPRC.bat を下記の内容、
 </P>
-<PRE>
+<PRE style="font-size: 16px;">
 @echo off 
 REM 
 REM Open DOS window with specified PATH setting. 
 REM 
-SET VMD_ROOT="C:\Program Files (x86)\University of Illinois"
-SET VMDDIR=%VMD_ROOT%\VMD
-SET ASKDIR="C:\Program Files (x86)\Atomsk"
-SET LMPHOME=C:\Program Files (x86)\LAMMPS 32-bit 5Jun2019
-REM SET LMPHOME=C:\Program Files\LAMMPS 64-bit 5Jun2019
-SET LAMMPS_POTENTIALS=%LMPHOME%\Potentials
-SET PATH=%LMPHOME%\bin;%ASKDIR%;%VMDDIR%;%PATH%
+SET VMDDIR="C:\Program Files\VMD"
+SET PATH=%VMDDIR%;%PATH%
 IF "%1" EQU "" %windir%\system32\cmd.exe
 </PRE>
 <P>
+<!--
 <FONT COLOR=RED>更新情報<BR>
 SET LAMMPS_POTENTIALS=%LMPHOME%\Potentials を追加。</FONT><BR>
 </P>
+-->
 <P>
 をコピー・ペーストし、メモ帳（Windowsアクセサリの中にある）等で（テキストファイルとして）作成し、LMPRC.bat というファイル名で保存する。<BR>
+LAMMPS, atomsk は上記の通りディフォールト設定でインストールすると、自動的にコマンドパスが設定される。
+<!--
 上記は、32bit版のLAMMPSの場合だが、64bit版をインストールした場合は、すぐ下のREM（注釈行）の付いた行のREMを除き、
 代りにその上の行（32bit版用）の行頭にREM を入れる。<BR>
 また、インストールしたLAMMPSのファイル名の特に最後の "5Jun2019" の部分が異なる場合はそれに合わせて上記の内容も変更する。
+-->
 </P>
 
 <P>
@@ -203,7 +203,7 @@ user add key b {pbc box -color green}<BR>
 </P>
 
 <P>
-atomsk GaN-uc.pdb -duplicate 5 5 5 GaN-5x5x5.pdb
+atomsk GaN-uc.pdb -duplicate 5 5 5 GaN-5x5x5 pdb
 </P>
 
 <P>
@@ -231,7 +231,7 @@ Fig. 2 Wirzite GaN (5x5x5 unit cells) with VMD
 </P>
 
 <P>
-atomsk GaN-uc.lmp -duplicate 5 5 5 GaN-5x5x5.lmp
+atomsk GaN-uc.lmp -duplicate 5 5 5 GaN-5x5x5 lmp
 </P>
 
 <P>
@@ -255,17 +255,17 @@ LAMMPSのインストールフォルダ、<BR>
 中の、Potentials フォルダには、種々のポテンシャルパラメーターファイルがある。<BR>
 今回は、GaN系の計算をするので、この中から GaN.tersoff ファイルを、上記で構造ファイル等を作成したフォルダーにコピーする。
 </P>
--->
 <P>
 <FONT COLOR=RED>更新情報<BR>
 以前必要だった、 GaN.tersoff ファイルのコピーは環境変数の追加により不要になりました。</FONT><BR>
 </P>
+-->
 <p>
 エネルギー最小化計算のスクリプトファイルの内容として、下記の内容をコピー・ペーストして、メモ帳等で（テキストファイルとして）作成し、
 GaN-min.txt というファイル名で保存する。
 </P>
 
-<PRE>
+<PRE style="font-size: 16px;">
 units		metal
 atom_style	atomic
 boundary	p p p
@@ -300,7 +300,7 @@ write_data コマンドで LAMMPS データーフォーマットで、GaN-5x5x5-
 </P>
 
 <P>
-lmp_serial < GaN-min.txt
+lmp < GaN-min.txt
 </P>
 
 <P>
@@ -318,7 +318,7 @@ lmp_serial < GaN-min.txt
 スクリプトファイルは例えば以下のように設定する。
 </P>
 
-<PRE>
+<PRE style="font-size: 16px;">
 units		metal
 atom_style	atomic
 boundary	p p p
@@ -346,7 +346,7 @@ write_data	GaN-5x5x5-su.lmp
 </P>
 
 <P>
-lmp_serial < GaN-su.txt
+lmp < GaN-su.txt
 </P>
 
 <P>
@@ -362,7 +362,7 @@ lmp_serial < GaN-su.txt
 スクリプトファイルは例えば以下のようになる。
 </P>
 
-<PRE>
+<PRE style="font-size: 16px;">
 units		metal
 atom_style	atomic
 boundary	p p p
@@ -394,7 +394,7 @@ GaN-su.txt にあった volocity コマンドが無い。<BR>
 </P>
 
 <P>
-lmp_serial < GaN-md.txt
+lmp < GaN-md.txt
 </P>
 
 <P>
@@ -435,8 +435,8 @@ vmd GaN-5x5x5-md.lammpstrj
 </P>
 
 <P ALIGN="center">
-	2019年08月25日更新<BR>
-	<I><A HREF="mailto:makoto-yoneya@aist.go.jp">makoto-yoneya@aist.go.jp</A> </I>
+	2023年02月24日更新<BR>
+	<I><A HREF="mailto:makoto-yoneya@frontier.hokudai.ac.jp">makoto-yoneya@frontier.hokudai.ac.jp</A> </I>
 </P>
 
 </BODY>
