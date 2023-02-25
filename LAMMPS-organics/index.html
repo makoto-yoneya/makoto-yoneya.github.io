@@ -505,7 +505,7 @@ C:\Users\ユーザー名（あるいはPublic）
 </P>
 <ol  class="enumerate1" >
 	<li class="enumerate" value="1">system.data : 座標等を含む、計算する系のLAMMPSデータファイル</li>
-	<li class="enumerate" value="3">system.in   : LAMMPS計算のスクリプトファイルのひな型</li>
+	<li class="enumerate" value="3">system.in   : LAMMPS計算のスクリプトファイルのひな型（moltemplate現行バージョンでは生成されない様である）</li>
 	<li class="enumerate" value="2">system.in.init : 使用する力場（ここではgeneral AMBER力場）の初期設定ファイル</li>
 	<li class="enumerate" value="3">system.in.settings : 力場パラメータファイル</li>
 </ol>
@@ -847,6 +847,19 @@ vmd.exe bpy-128_md.psf bpy-128_md.xtc
 と入力することにより VMD でトラジェクトリーがアニメーションとして見る事が出来る。<BR>
 アニメーションの再生・停止等は、Mainウインドウ下部のそれぞれのボタンを押すことにより可能である。<BR> 
 </P>
+
+<P>
+ここまでのまとめとして、全体の流れとプログラム、ファイルの関係を下図に示す。
+</P>
+
+<CENTER>
+<P>
+<img src="images/modelling-lammps.jpg" alt="PIC" class="graphics" width="40%">
+</P>
+<P>
+Fig. 4 modelling and simulation flowchart
+</P>
+</CENTER>
 
 <h3 class="sectionHead">3.  おわりに</h3>
 
