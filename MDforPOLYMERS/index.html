@@ -26,9 +26,6 @@
 <HR WIDTH=60% ALIGN="center">
 	<H2 ALIGN="center"><FONT COLOR="crimson">
 		「GROMACSと連携ソフトウエアによる分子動力学計算」合成高分子</H2>
-<CENTER>
-	以前の内容（低分子 4,4'-bpy の例）は<a href="../MDforPRIMERS/">こちら</A> 
-</CENTER>
 <BR>
 	</FONT>
 
@@ -86,8 +83,11 @@ GAFFをGROMACSのモノマー（残基）モデリングで用いるための方
 <P>
 Windows 10 64bit でubuntu等のLINUXを利用可能とするMicrosof提供の環境。<BR>
 下記でLAMMPS等の実行の環境として使用する。<BR>
-WSLのインストール法についてはネット上に多くの情報があるので、
-例えば<a href="https://qiita.com/Aruneko/items/c79810b0b015bebf30bb">ここ</A>等を参照してインストールする。
+<FONT COLOR=red>
+現在WSLの主流はWSL2であるが、下記ではWindowsファイル操作が中心となるためWSL1を用いる（2023.02更新）。<BR>
+</FONT>
+WSL1のインストール法についてはネット上に多くの情報があるので、
+例えば<a href="https://qiita.com/tkj06/items/b5c195db860241663485">ここ</A>等を参照してインストールする。
 </P>
 <P>
 WSLインストール後に、WSLを起動して後に必要となるプログラムを追加しておく。<BR>
@@ -143,11 +143,6 @@ which gmx
 次に、
 general AMBER 力場を使うための支援プログラム<a href="http://ambermd.org/antechamber/antechamber.html"> antechamber </A>、
 SYBYL-mol2ファイルを残基トポロジーファイルに変換するスクリプトmol22rtp.pl等をダウンロード・インストールする。
-</P>
-
-<P>
-<FONT COLOR=RED>更新情報</FONT><BR>
-antechamber を AmberTools20 ベースの物に変更。
 </P>
 
 <P>
@@ -1291,8 +1286,8 @@ antechamber -fi gout -i 3lla.log -fo mol2 -o 3lla.mol2 -at gaff -c resp -dr no
 </P>
 
 <P ALIGN="center">
-	2020年05月21日更新<BR>
-	<I><A HREF="mailto:makoto-yoneya@aist.go.jp">makoto-yoneya@aist.go.jp</A> </I>
+	2023年02月23日更新<BR>
+	<I><A HREF="mailto:makoto-yoneya@frontier.hokudai.ac.jp">makoto-yoneya@frontier.hokudai.ac.jp</A> </I>
 </P>
 
 </BODY>
