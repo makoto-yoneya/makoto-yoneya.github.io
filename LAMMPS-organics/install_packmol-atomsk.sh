@@ -16,25 +16,26 @@ else
 	fi
 fi
 
-if [ -x /usr/bin/atomsk ]; then
-	echo "OK! atomsk was found"
-else
-	echo "* downloading packmol package file"
-	wget https://atomsk.univ-lille.fr/code/atomsk_${ver_atomsk}_amd64.deb
-	echo "** installing atomsk"
-	sudo dpkg -i atomsk_${ver_atomsk}_amd64.deb
-	if [ -x /usr/bin/atomsk ]; then
-		rm -f atomsk_${ver_atomsk}_amd64.deb
-	fi
-fi
-
-#if [ -x $HOME/bin/atomsk ]; then
+#if [ -x /usr/bin/atomsk ]; then
 #	echo "OK! atomsk was found"
 #else
-#	echo "* moving to $HOME/bin dir."
-#	cd  $HOME/bin
+#	echo "* downloading packmol package file"
+#	wget https://atomsk.univ-lille.fr/code/atomsk_${ver_atomsk}_amd64.deb
 #	echo "** installing atomsk"
-#	wget -q https://github.com/makoto-yoneya/antechamber-at20/releases/download/1.27.20/atomsk-0.10.6.tar.gz
-#	tar zxvf atomsk-0.10.6.tar.gz
-#	rm -rf atomsk-0.10.6.tar.gz
+#	sudo dpkg -i atomsk_${ver_atomsk}_amd64.deb
+#	if [ -x /usr/bin/atomsk ]; then
+#		rm -f atomsk_${ver_atomsk}_amd64.deb
+#	fi
 #fi
+
+if [ -x $HOME/bin/atomsk ]; then
+	echo "OK! atomsk was found"
+else
+	echo "* moving to $HOME/bin dir."
+	cd  $HOME/bin
+	echo "** installing atomsk"
+	wget -q https://github.com/makoto-yoneya/makoto-yoneya.github.io/releases/download/atomsk-0.10.6-test/atomsk-0.10.6.tar.gz
+	tar zxvf atomsk-0.10.6.tar.gz
+	chmod ugo+x atomsk
+	rm -rf atomsk-0.10.6.tar.gz
+fi
