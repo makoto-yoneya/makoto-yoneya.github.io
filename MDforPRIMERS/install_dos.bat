@@ -44,9 +44,9 @@ if exist %MAIN_ROOT%\gromacs (
 	echo gromacs    was found in %MAIN_ROOT%\gromacs
 ) else (
 	echo *** installing gromacs
-	curl -OL https://github.com/makoto-yoneya/gromacs-MSVC/releases/download/2019.6.win32/gromacs-2019.6-win32.zip
-	call powershell -command "Expand-Archive  gromacs-2019.6-win32.zip %MAIN_ROOT%\gromacs"
-	del gromacs-2019.6-win32.zip
+	curl -OL https://github.com/makoto-yoneya/gromacs-MSVC/releases/download/2023win32/gromacs-2023-win32.zip
+	call powershell -command "Expand-Archive  gromacs-2023-win32.zip %MAIN_ROOT%\gromacs"
+	del gromacs-2023-win32.zip
 )
 
 REM echo moving to home
