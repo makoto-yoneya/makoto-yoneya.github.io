@@ -160,6 +160,13 @@ Windowsネイティブ版GROMACSをver.2023にアップデートしました。<
 </P>
 
 <P>
+<FONT COLOR=RED>あるいは、、下記の図２に対応する三次元座標の4,4'-bpyのサンプルmolファイルが下記コマンドでダウンロード可能なので、分子エディタによる作業をスキップし、最初はこのファイルで1.2節以下の手順を試すことを推奨する。</FONT>
+</P>
+<P>
+curl -OL https://github.com/makoto-yoneya/makoto-yoneya.github.io/raw/master/MDforPRIMERS/bpy-aa.mol
+</P>
+
+<P>
 ChemSketch Freewareを用いた化学構造の描画は直感的に可能である。原子のインデックス番号は、基本的に作画した順に振られていくので、図１のように端から番号をつけたければ作画の順番を意識するとよい。
 </P>
 
@@ -271,7 +278,7 @@ topolbuild -n bpy-aa -dir C:\opt\topolbuild -ff gaff -purge 0
 <P>
 "Bond record does not end with @&lt;TRIPOS&gt;"<BR>
 等の入力mol2ファイル書式に関するWarning が表示される事が有るが、これは無視して良い。<BR>
-"Incomplete mol2 file after bonds record"<BR>
+<FONT COLOR=RED>"Incomplete mol2 file after bonds record"</FONT><BR>
 等でエラーとなってしまう場合には、コマンドプロンプトで、<BR>
 <P>
 echo @^&lt;TRIPOS^&gt; &gt;&gt; bpy-aa.mol2<BR>
@@ -437,9 +444,12 @@ copy bpy-aa.top bpy-aa.txt
 </P>
 
 <P>
-上記、bpy-aa.txt をダブルクリックして普通のテキストファイルとして開き、
+上記、bpy-aa.txt をダブルクリックして普通のテキストファイルとして開き、<BR>
 <font color=red>
-最後の行のtopolbuildによるこのファイルの自動生成時のディフォールト値の 1 分子を、実際に計算する系中の分子数（上記の例では128）に合わせて変更して保存する。
+最後の行のtopolbuildによるこのファイルの自動生成時のディフォールト値の 1 分子<BR>
+  bpy-aa           1<BR>
+を、実際に計算する系中の分子数（上記の例では128）に合わせ次の様に変更して保存する。<BR>
+  bpy-aa           128<BR>
 </font>
 </P>
 
@@ -744,7 +754,7 @@ SPC水以外の溶媒の場合は、上記 gaff_spcw.itp の代わりに当該�
 </P>
 
 <P ALIGN="center">
-	2023年03月21日更新<BR>
+	2023年03月25日更新<BR>
 	<I><A HREF="mailto:makoto-yoneya@frontier.hokudai.ac.jp">
 makoto-yoneya@frontier.hokudai.ac.jp</A> </I>
 </P>
